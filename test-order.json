@@ -4,11 +4,20 @@
   "currency": "PLN",
   "email": "test@example.com",
   "total_price": "123.00",
+  "billing_address": {
+    "name": "Jan Kowalski",
+    "company": "",
+    "address1": "ul. Testowa 1",
+    "city": "Warszawa",
+    "zip": "00-001",
+    "vat_number": ""
+  },
   "line_items": [
     {
       "title": "Event ticket",
       "quantity": 1,
-      "price": "123.00"
+      "price": "123.00",
+      "tax_lines": [{ "rate": 0.23, "price": "23.00" }]
     }
   ]
 }
