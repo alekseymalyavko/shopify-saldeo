@@ -5,7 +5,7 @@
  * It correctly signs the request with HMAC-SHA256 so the handler accepts it.
  *
  * Usage:
- *   node test-webhook.js [YOUR_VERCEL_URL]
+ *   node test-webhook.js [YOUR_VERCEL_URL] [RECIPIENT_EMAIL]
  *
  * Example:
  *   node test-webhook.js https://shopify-saldeo-xyz.vercel.app
@@ -21,6 +21,7 @@ import { readFileSync } from "fs";
 // ---------------------------------------------------------------------------
 
 const VERCEL_URL = process.argv[2];
+const RECIPIENT_EMAIL = process.argv[3] || "aleksmalyavko@gmail.com";
 
 if (!VERCEL_URL) {
   console.error(
@@ -45,28 +46,32 @@ const SHOPIFY_WEBHOOK_SECRET = secretMatch[1].trim();
 // Fake order payload (mirrors what Shopify sends for a paid order)
 // ---------------------------------------------------------------------------
 
+const testSeed = Date.now();
+const testOrderId = Number(`82${String(testSeed).slice(-12)}`);
+const testOrderNumber = Number(String(testSeed).slice(-6));
+
 const order = {
-  id: 820982911946154500,
-  order_number: 1001,
+  id: testOrderId,
+  order_number: testOrderNumber,
   created_at: new Date().toISOString(),
   currency: "PLN",
   total_price: "123.00",
-  email: "aleksmalyavko@gmail.com",
+  email: RECIPIENT_EMAIL,
   billing_address: {
     name: "Jan Kowalski",
     company: "",
     address1: "ul. Testowa 1",
     city: "Warszawa",
     zip: "00-001",
-    vat_number: "",
+    vat_number: "321",
   },
   line_items: [
     {
       id: 1,
-      title: "Event Ticket — Test Concert",
+      title: "Event Ticket - Test Concert",
       quantity: 1,
       price: "123.00",
-      tax_lines: [{ rate: 0.23, price: "23.00" }],
+      tax_lines: [{ rate: 0.08, price: "8.00" }],
     },
   ],
 };

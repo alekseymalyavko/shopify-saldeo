@@ -101,6 +101,82 @@ function parseSaldeoError(xml) {
   };
 }
 
+function decodeXmlEntities(value) {
+  return (value || "")
+    .replaceAll("&amp;", "&")
+    .replaceAll("&lt;", "<")
+    .replaceAll("&gt;", ">")
+    .replaceAll("&quot;", '"')
+    .replaceAll("&apos;", "'");
+}
+
+function wait(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function downloadPdfWithRetry(pdfUrl, retries = 6, delayMs = 2000) {
+  let lastError;
+
+  for (let attempt = 1; attempt <= retries; attempt += 1) {
+    try {
+      const pdfRes = await axios.get(pdfUrl, {
+        responseType: "arraybuffer",
+        timeout: 15000,
+      });
+
+      if (pdfRes.status === 200 && pdfRes.data) {
+        return Buffer.from(pdfRes.data);
+      }
+
+      throw new Error(`Unexpected status ${pdfRes.status}`);
+    } catch (error) {
+      lastError = error;
+      const status = error?.response?.status;
+      const retriable = status === 404 || status === 429 || (status >= 500 && status <= 599);
+
+      if (!retriable || attempt === retries) break;
+
+      console.warn(
+        `PDF download attempt ${attempt}/${retries} failed with status ${status ?? "unknown"}. Retrying in ${delayMs}ms...`
+      );
+      await wait(delayMs);
+    }
+  }
+
+  throw lastError || new Error("Failed to download PDF");
+}
+
+async function createInvoiceWithRetry(invoiceXml, retries = 3, delayMs = 1500) {
+  let lastError;
+
+  for (let attempt = 1; attempt <= retries; attempt += 1) {
+    const createRes = await saldeoRequest(
+      `/api/xml/3.0/invoice/add?company_program_id=${cleanEnv(process.env.SALDEO_COMPANY_PROGRAM_ID)}`,
+      invoiceXml
+    );
+
+    console.log(`Saldeo invoice/add response (attempt ${attempt}/${retries}):`, createRes);
+
+    const invoiceAddError = parseSaldeoError(createRes);
+    if (!invoiceAddError) return createRes;
+
+    lastError = new Error(
+      `Saldeo invoice/add failed [${invoiceAddError.code}] ${invoiceAddError.message}. ` +
+      `username=${cleanEnv(process.env.SALDEO_USERNAME)}, company_program_id=${cleanEnv(process.env.SALDEO_COMPANY_PROGRAM_ID)}`
+    );
+
+    const retriable = invoiceAddError.code === "5000";
+    if (!retriable || attempt === retries) break;
+
+    console.warn(
+      `invoice/add temporary server error (attempt ${attempt}/${retries}). Retrying in ${delayMs}ms...`
+    );
+    await wait(delayMs);
+  }
+
+  throw lastError || new Error("Saldeo invoice/add failed");
+}
+
 // =======================
 // Contractor merge XML builder
 // =======================
@@ -137,18 +213,20 @@ function buildContractorMergeXML(order) {
 // =======================
 function buildInvoiceXML(order, contractorId) {
   const issueDate = new Date(order.created_at).toISOString().slice(0, 10);
+  const invoiceNumber = buildInvoiceNumber(order);
 
   const itemsXml = order.line_items
     .map((item) => {
       const vatRate = item.tax_lines?.[0]?.rate
         ? item.tax_lines[0].rate * 100
-        : 23;
+        : 8;
 
-      const net = parseFloat(item.price) / (1 + vatRate / 100);
+      const net = Number.parseFloat(item.price) / (1 + vatRate / 100);
+      const safeTitle = escapeXml(item.title || "Item");
 
       return `
         <INVOICE_ITEM>
-          <NAME>${item.title}</NAME>
+          <NAME>${safeTitle}</NAME>
           <AMOUNT>${item.quantity}</AMOUNT>
           <UNIT>szt</UNIT>
           <UNIT_VALUE>${net.toFixed(2)}</UNIT_VALUE>
@@ -161,18 +239,22 @@ function buildInvoiceXML(order, contractorId) {
   return `<?xml version="1.0" encoding="UTF-8"?>
 <ROOT>
   <INVOICE>
-    <NUMBER>SHOP-${order.order_number}</NUMBER>
-    <ISSUE_DATE>${issueDate}</ISSUE_DATE>
-    <SALE_DATE>${issueDate}</SALE_DATE>
-    <DUE_DATE>${issueDate}</DUE_DATE>
-    <PURCHASER_CONTRACTOR_ID>${contractorId}</PURCHASER_CONTRACTOR_ID>
-    <CURRENCY_ISO4217>${order.currency}</CURRENCY_ISO4217>
+    <NUMBER>${escapeXml(invoiceNumber)}</NUMBER>
+    <ISSUE_DATE>${escapeXml(issueDate)}</ISSUE_DATE>
+    <SALE_DATE>${escapeXml(issueDate)}</SALE_DATE>
+    <DUE_DATE>${escapeXml(issueDate)}</DUE_DATE>
+    <PURCHASER_CONTRACTOR_ID>${escapeXml(contractorId)}</PURCHASER_CONTRACTOR_ID>
+    <CURRENCY_ISO4217>${escapeXml(order.currency || "PLN")}</CURRENCY_ISO4217>
     <PAYMENT_TYPE>TRANSFER</PAYMENT_TYPE>
     <INVOICE_ITEMS>
       ${itemsXml}
     </INVOICE_ITEMS>
   </INVOICE>
 </ROOT>`;
+}
+
+function buildInvoiceNumber(order) {
+  return `SHOP-${order.order_number}`;
 }
 
 // =======================
@@ -236,7 +318,7 @@ async function saldeoRequest(path, xml) {
 // =======================
 // Email sender
 // =======================
-async function sendInvoiceEmail(to, pdfBuffer, invoiceNumber) {
+async function sendInvoiceEmail(to, pdfBuffer, invoiceNumber, pdfUrl) {
   const transporter = nodemailer.createTransport({
     host: cleanEnv(process.env.SMTP_HOST),
     port: parseInt(cleanEnv(process.env.SMTP_PORT), 10) || 587,
@@ -246,18 +328,47 @@ async function sendInvoiceEmail(to, pdfBuffer, invoiceNumber) {
       pass: cleanEnv(process.env.SMTP_PASS),
     },
   });
-  await transporter.sendMail({
+  const text = pdfBuffer
+    ? [
+        "Thank you for your purchase!",
+        `Invoice number: ${invoiceNumber}`,
+        "Your invoice PDF is attached.",
+      ].join("\n")
+    : [
+        "Thank you for your purchase!",
+        `Invoice number: ${invoiceNumber}`,
+        "The PDF attachment is not available yet, but you can open the invoice using the link below:",
+        pdfUrl,
+      ].join("\n");
+
+  const html = pdfBuffer
+    ? `<p>Thank you for your purchase!</p>
+<p>Invoice number: <strong>${escapeXml(invoiceNumber)}</strong></p>
+<p>Your invoice PDF is attached.</p>`
+    : `<p>Thank you for your purchase!</p>
+<p>Invoice number: <strong>${escapeXml(invoiceNumber)}</strong></p>
+<p>The PDF attachment is not available yet. You can open the invoice using the link below:</p>
+<p><a href="${escapeXml(pdfUrl)}">Open invoice document</a></p>`;
+
+  const mail = {
     from: `"Your Company" <${cleanEnv(process.env.SMTP_USER)}>`,
     to,
     subject: `Your invoice ${invoiceNumber}`,
-    text: `Thank you for your purchase! Your invoice is attached.`,
-    attachments: [
+    text,
+    html,
+  };
+
+  if (pdfBuffer) {
+    mail.attachments = [
       {
         filename: `invoice-${invoiceNumber}.pdf`,
         content: pdfBuffer,
       },
-    ],
-  });
+    ];
+  }
+
+  const info = await transporter.sendMail(mail);
+  console.log("Email sent:", { to, messageId: info.messageId, hasAttachment: Boolean(pdfBuffer) });
 }
 
 // =======================
@@ -294,6 +405,10 @@ export default async function handler(req, res) {
   try {
     const order = JSON.parse(rawBody.toString("utf8"));
     console.log("New paid order:", order.order_number);
+    console.log("Saldeo request context:", {
+      username: cleanEnv(process.env.SALDEO_USERNAME),
+      company_program_id: cleanEnv(process.env.SALDEO_COMPANY_PROGRAM_ID),
+    });
 
     // 1️⃣ Ensure contractor exists in Saldeo (upsert), get numeric CONTRACTOR_ID
     const contractorXml = buildContractorMergeXML(order);
@@ -316,37 +431,32 @@ export default async function handler(req, res) {
 
     // 2️⃣ Create invoice in Saldeo
     const invoiceXml = buildInvoiceXML(order, contractorId);
-    const createRes = await saldeoRequest(
-      `/api/xml/3.0/invoice/add?company_program_id=${cleanEnv(process.env.SALDEO_COMPANY_PROGRAM_ID)}`,
-      invoiceXml
-    );
-
-    console.log("Saldeo invoice/add response:", createRes);
-
-    const invoiceAddError = parseSaldeoError(createRes);
-    if (invoiceAddError) {
-      throw new Error(
-        `Saldeo invoice/add failed [${invoiceAddError.code}] ${invoiceAddError.message}. ` +
-        `username=${cleanEnv(process.env.SALDEO_USERNAME)}, company_program_id=${cleanEnv(process.env.SALDEO_COMPANY_PROGRAM_ID)}`
-      );
-    }
+    console.log("Saldeo invoice/add number:", buildInvoiceNumber(order));
+    console.log("Saldeo invoice/add xml:", invoiceXml);
+    const createRes = await createInvoiceWithRetry(invoiceXml);
 
     const invoiceIdMatch = createRes.match(/<INVOICE_ID>([^<]+)<\/INVOICE_ID>/);
     if (!invoiceIdMatch) throw new Error("Invoice ID not returned by Saldeo. Response: " + createRes);
     const invoiceId = invoiceIdMatch[1];
 
+    // Wait for Saldeo to generate the PDF (recommended: ~30 seconds)
+    console.log("Waiting 30 seconds for Saldeo to generate PDF...");
+    await wait(30000);
+
     // 3️⃣ Get invoice PDF
     const listXml = `<?xml version="1.0" encoding="UTF-8"?>
 <ROOT>
-  <INVOICE_IDS>
+  <INVOICES>
     <INVOICE_ID>${invoiceId}</INVOICE_ID>
-  </INVOICE_IDS>
+  </INVOICES>
 </ROOT>`;
 
     const listRes = await saldeoRequest(
       `/api/xml/3.0/invoice/listbyid?company_program_id=${cleanEnv(process.env.SALDEO_COMPANY_PROGRAM_ID)}`,
       listXml
     );
+
+    console.log("Saldeo invoice/listbyid response:", listRes);
 
     const listError = parseSaldeoError(listRes);
     if (listError) {
@@ -358,15 +468,37 @@ export default async function handler(req, res) {
 
     const pdfUrlMatch = listRes.match(/<SOURCE>(.*?)<\/SOURCE>/);
     if (!pdfUrlMatch) throw new Error("PDF URL not found in Saldeo response");
-    const pdfUrl = pdfUrlMatch[1];
+    const pdfUrl = decodeXmlEntities(pdfUrlMatch[1]);
+    console.log("Saldeo invoice PDF source:", pdfUrl);
 
-    const pdfRes = await axios.get(pdfUrl, { responseType: "arraybuffer" });
-    const pdfBuffer = Buffer.from(pdfRes.data);
+    let pdfBuffer = null;
+    let emailSent = false;
+    let emailError = null;
 
-    // 4️⃣ Send email
-    await sendInvoiceEmail(order.email, pdfBuffer, `SHOP-${order.order_number}`);
+    try {
+      pdfBuffer = await downloadPdfWithRetry(pdfUrl);
+    } catch (downloadErr) {
+      console.warn("PDF download failed, email will be sent without attachment:", downloadErr?.message || downloadErr);
+    }
 
-    res.status(200).send("OK");
+    // 4️⃣ Send email (non-blocking for invoice pipeline)
+    try {
+      await sendInvoiceEmail(order.email, pdfBuffer, buildInvoiceNumber(order), pdfUrl);
+      emailSent = true;
+    } catch (mailErr) {
+      emailError = mailErr?.message || String(mailErr);
+      console.error("Email sending failed, but invoice was created:", emailError);
+    }
+
+    res.status(200).json({
+      ok: true,
+      invoiceId,
+      invoiceNumber: buildInvoiceNumber(order),
+      pdfSourceUrl: pdfUrl,
+      pdfDownloaded: Boolean(pdfBuffer),
+      emailSent,
+      emailError,
+    });
   } catch (err) {
     console.error("Webhook processing failed:", err);
     res.status(500).send("Internal error");
