@@ -10,6 +10,11 @@ export const config = {
   },
 };
 
+// In-memory idempotency guard – protects against rapid duplicate webhooks within
+// the same function instance (e.g. Shopify retries within seconds).
+// For persistent deduplication across cold starts, configure Vercel KV.
+const processedOrders = new Map();
+
 // =======================
 // Utils — Shopify verify
 // =======================
@@ -95,10 +100,20 @@ function parseSaldeoError(xml) {
   const status = extractTagValue(xml, "STATUS");
   if (status !== "ERROR") return null;
 
-  return {
-    code: extractTagValue(xml, "ERROR_CODE") || "UNKNOWN",
-    message: extractTagValue(xml, "ERROR_MESSAGE") || "Unknown Saldeo error",
-  };
+  const code = extractTagValue(xml, "ERROR_CODE") || "UNKNOWN";
+  const message = extractTagValue(xml, "ERROR_MESSAGE") || "Unknown Saldeo error";
+
+  if (code === "6001") {
+    console.error(`[Saldeo 6001] Permission denied: "${message}". Enable this permission in Saldeo user settings.`);
+  } else if (code === "4000") {
+    console.error(`[Saldeo 4000] XSD validation error: "${message}". Check the XML structure.`);
+  } else if (code === "5000") {
+    console.warn(`[Saldeo 5000] Temporary server error: "${message}". Retrying...`);
+  } else {
+    console.error(`[Saldeo ${code}] ${message}`);
+  }
+
+  return { code, message };
 }
 
 function decodeXmlEntities(value) {
@@ -114,36 +129,38 @@ function wait(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function downloadPdfWithRetry(pdfUrl, retries = 6, delayMs = 2000) {
-  let lastError;
+// Polls the Saldeo SOURCE URL until the PDF file becomes available.
+// Saldeo generates PDFs asynchronously after invoice creation (typically ~15–30 seconds).
+async function pollForPdf(pdfUrl, initialDelayMs = 5000, retryDelayMs = 5000, maxAttempts = 6) {
+  await wait(initialDelayMs);
 
-  for (let attempt = 1; attempt <= retries; attempt += 1) {
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
     try {
       const pdfRes = await axios.get(pdfUrl, {
         responseType: "arraybuffer",
-        timeout: 15000,
+        timeout: 10000,
       });
 
-      if (pdfRes.status === 200 && pdfRes.data) {
+      if (pdfRes.status === 200 && pdfRes.data?.byteLength > 100) {
+        console.log(`PDF ready on poll attempt ${attempt}/${maxAttempts}`);
         return Buffer.from(pdfRes.data);
       }
 
       throw new Error(`Unexpected status ${pdfRes.status}`);
-    } catch (error) {
-      lastError = error;
-      const status = error?.response?.status;
-      const retriable = status === 404 || status === 429 || (status >= 500 && status <= 599);
+    } catch (err) {
+      const status = err?.response?.status;
+      const retriable = !status || status === 404 || status === 429 || status >= 500;
 
-      if (!retriable || attempt === retries) break;
+      if (!retriable || attempt === maxAttempts) {
+        throw new Error(`PDF unavailable after ${attempt} attempts: ${err?.message}`);
+      }
 
-      console.warn(
-        `PDF download attempt ${attempt}/${retries} failed with status ${status ?? "unknown"}. Retrying in ${delayMs}ms...`
-      );
-      await wait(delayMs);
+      console.warn(`PDF poll ${attempt}/${maxAttempts}: HTTP ${status ?? "network error"}. Waiting ${retryDelayMs}ms...`);
+      await wait(retryDelayMs);
     }
   }
 
-  throw lastError || new Error("Failed to download PDF");
+  throw new Error("PDF not available after polling");
 }
 
 async function createInvoiceWithRetry(invoiceXml, retries = 3, delayMs = 1500) {
@@ -318,7 +335,7 @@ async function saldeoRequest(path, xml) {
 // =======================
 // Email sender
 // =======================
-async function sendInvoiceEmail(to, pdfBuffer, invoiceNumber, pdfUrl) {
+async function sendInvoiceEmail(to, pdfBuffer, invoiceNumber) {
   const transporter = nodemailer.createTransport({
     host: cleanEnv(process.env.SMTP_HOST),
     port: parseInt(cleanEnv(process.env.SMTP_PORT), 10) || 587,
@@ -337,8 +354,7 @@ async function sendInvoiceEmail(to, pdfBuffer, invoiceNumber, pdfUrl) {
     : [
         "Thank you for your purchase!",
         `Invoice number: ${invoiceNumber}`,
-        "The PDF attachment is not available yet, but you can open the invoice using the link below:",
-        pdfUrl,
+        "Your invoice has been created. Please contact us if you need a copy.",
       ].join("\n");
 
   const html = pdfBuffer
@@ -347,8 +363,7 @@ async function sendInvoiceEmail(to, pdfBuffer, invoiceNumber, pdfUrl) {
 <p>Your invoice PDF is attached.</p>`
     : `<p>Thank you for your purchase!</p>
 <p>Invoice number: <strong>${escapeXml(invoiceNumber)}</strong></p>
-<p>The PDF attachment is not available yet. You can open the invoice using the link below:</p>
-<p><a href="${escapeXml(pdfUrl)}">Open invoice document</a></p>`;
+<p>Your invoice has been created. Please contact us if you need a copy.</p>`;
 
   const mail = {
     from: `"Your Company" <${cleanEnv(process.env.SMTP_USER)}>`,
@@ -374,7 +389,6 @@ async function sendInvoiceEmail(to, pdfBuffer, invoiceNumber, pdfUrl) {
 // =======================
 // Vercel handler
 // =======================
-// Helper to read the full raw body from a Node.js IncomingMessage stream
 function readRawBody(req) {
   return new Promise((resolve, reject) => {
     const chunks = [];
@@ -387,120 +401,135 @@ function readRawBody(req) {
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).send("Method not allowed");
 
-  // Read raw bytes before any JSON parsing so the HMAC check works
   const rawBody = await readRawBody(req);
   const hmac = req.headers["x-shopify-hmac-sha256"];
 
-  if (
-    !verifyShopifyWebhook(
-      rawBody,
-      hmac,
-      process.env.SHOPIFY_WEBHOOK_SECRET
-    )
-  ) {
+  if (!verifyShopifyWebhook(rawBody, hmac, process.env.SHOPIFY_WEBHOOK_SECRET)) {
     console.error("Invalid Shopify webhook signature");
     return res.status(401).send("Invalid webhook");
   }
 
+  let order;
   try {
-    const order = JSON.parse(rawBody.toString("utf8"));
-    console.log("New paid order:", order.order_number);
-    console.log("Saldeo request context:", {
+    order = JSON.parse(rawBody.toString("utf8"));
+  } catch {
+    return res.status(400).send("Bad request: invalid JSON");
+  }
+
+  const orderId = String(order.id);
+  console.log("Paid order received:", order.order_number, "| Shopify ID:", orderId);
+
+  // Idempotency: skip if this function instance already handled this order
+  // (guards against rapid Shopify retries before a cold start resets state)
+  if (processedOrders.has(orderId)) {
+    const existingInvoiceId = processedOrders.get(orderId);
+    console.log(`Duplicate webhook for order ${order.order_number}. Invoice ID: ${existingInvoiceId}`);
+    return res.status(200).json({ ok: true, duplicate: true, invoiceId: existingInvoiceId });
+  }
+
+  try {
+    console.log("Saldeo context:", {
       username: cleanEnv(process.env.SALDEO_USERNAME),
       company_program_id: cleanEnv(process.env.SALDEO_COMPANY_PROGRAM_ID),
     });
 
-    // 1️⃣ Ensure contractor exists in Saldeo (upsert), get numeric CONTRACTOR_ID
+    // 1️⃣ contractor/merge (idempotent by design — safe to retry)
     const contractorXml = buildContractorMergeXML(order);
     const contractorRes = await saldeoRequest(
       `/api/xml/1.0/contractor/merge?company_program_id=${cleanEnv(process.env.SALDEO_COMPANY_PROGRAM_ID)}`,
       contractorXml
     );
-    console.log("Saldeo contractor/merge response:", contractorRes);
 
-    const contractorEntityStatus = extractStatuses(contractorRes).find((s) =>
+    const contractorStatus = extractStatuses(contractorRes).find((s) =>
       ["CREATED", "MERGED", "CONFLICT", "RECREATED", "NOT_VALID"].includes(s)
     );
-    if (contractorEntityStatus === "CONFLICT" || contractorEntityStatus === "NOT_VALID") {
-      throw new Error(`Contractor merge failed with status ${contractorEntityStatus}. Response: ${contractorRes}`);
+    if (contractorStatus === "CONFLICT" || contractorStatus === "NOT_VALID") {
+      throw new Error(`contractor/merge failed: ${contractorStatus}. Response: ${contractorRes}`);
     }
 
     const contractorIdMatch = contractorRes.match(/<CONTRACTOR_ID>([^<]+)<\/CONTRACTOR_ID>/);
-    if (!contractorIdMatch) throw new Error("Contractor ID not returned by Saldeo. Response: " + contractorRes);
+    if (!contractorIdMatch) throw new Error("No CONTRACTOR_ID in Saldeo response: " + contractorRes);
     const contractorId = contractorIdMatch[1];
+    console.log("contractor/merge:", contractorStatus, "| CONTRACTOR_ID:", contractorId);
 
-    // 2️⃣ Create invoice in Saldeo
+    // 2️⃣ invoice/add
     const invoiceXml = buildInvoiceXML(order, contractorId);
-    console.log("Saldeo invoice/add number:", buildInvoiceNumber(order));
-    console.log("Saldeo invoice/add xml:", invoiceXml);
+    console.log("invoice/add number:", buildInvoiceNumber(order));
     const createRes = await createInvoiceWithRetry(invoiceXml);
 
     const invoiceIdMatch = createRes.match(/<INVOICE_ID>([^<]+)<\/INVOICE_ID>/);
-    if (!invoiceIdMatch) throw new Error("Invoice ID not returned by Saldeo. Response: " + createRes);
+    if (!invoiceIdMatch) throw new Error("No INVOICE_ID in Saldeo response: " + createRes);
     const invoiceId = invoiceIdMatch[1];
+    console.log("invoice/add OK | INVOICE_ID:", invoiceId);
 
-    // Wait for Saldeo to generate the PDF (recommended: ~30 seconds)
-    console.log("Waiting 30 seconds for Saldeo to generate PDF...");
-    await wait(30000);
+    // Mark order as processed to block duplicates on rapid retries
+    processedOrders.set(orderId, invoiceId);
+    if (processedOrders.size > 500) {
+      processedOrders.delete(processedOrders.keys().next().value);
+    }
 
-    // 3️⃣ Get invoice PDF
-    const listXml = `<?xml version="1.0" encoding="UTF-8"?>
+    // 3️⃣ Get SOURCE URL via listbyid (fast — returns URL even before PDF is ready)
+    let pdfUrl = null;
+    try {
+      const listXml = `<?xml version="1.0" encoding="UTF-8"?>
 <ROOT>
   <INVOICES>
     <INVOICE_ID>${invoiceId}</INVOICE_ID>
   </INVOICES>
 </ROOT>`;
-
-    const listRes = await saldeoRequest(
-      `/api/xml/3.0/invoice/listbyid?company_program_id=${cleanEnv(process.env.SALDEO_COMPANY_PROGRAM_ID)}`,
-      listXml
-    );
-
-    console.log("Saldeo invoice/listbyid response:", listRes);
-
-    const listError = parseSaldeoError(listRes);
-    if (listError) {
-      throw new Error(
-        `Saldeo invoice/listbyid failed [${listError.code}] ${listError.message}. ` +
-        `invoice_id=${invoiceId}`
+      const listRes = await saldeoRequest(
+        `/api/xml/3.0/invoice/listbyid?company_program_id=${cleanEnv(process.env.SALDEO_COMPANY_PROGRAM_ID)}`,
+        listXml
       );
+      const listError = parseSaldeoError(listRes);
+      if (listError) {
+        console.warn(`invoice/listbyid error [${listError.code}]: ${listError.message}`);
+      } else {
+        const pdfUrlMatch = listRes.match(/<SOURCE>(.*?)<\/SOURCE>/);
+        pdfUrl = pdfUrlMatch ? decodeXmlEntities(pdfUrlMatch[1]) : null;
+        console.log("invoice/listbyid OK | SOURCE:", pdfUrl);
+      }
+    } catch (listErr) {
+      console.warn("invoice/listbyid failed (non-fatal):", listErr?.message);
     }
 
-    const pdfUrlMatch = listRes.match(/<SOURCE>(.*?)<\/SOURCE>/);
-    if (!pdfUrlMatch) throw new Error("PDF URL not found in Saldeo response");
-    const pdfUrl = decodeXmlEntities(pdfUrlMatch[1]);
-    console.log("Saldeo invoice PDF source:", pdfUrl);
-
+    // 4️⃣ Poll for PDF — waits until Saldeo generates the file
     let pdfBuffer = null;
+    if (pdfUrl) {
+      try {
+        pdfBuffer = await pollForPdf(pdfUrl);
+      } catch (pollErr) {
+        console.warn("PDF not ready after polling:", pollErr?.message);
+      }
+    } else {
+      console.warn("No SOURCE URL available — skipping PDF download");
+    }
+
+    // 5️⃣ Send email (with PDF attachment if available, plain text if not)
     let emailSent = false;
     let emailError = null;
-
     try {
-      pdfBuffer = await downloadPdfWithRetry(pdfUrl);
-    } catch (downloadErr) {
-      console.warn("PDF download failed, email will be sent without attachment:", downloadErr?.message || downloadErr);
-    }
-
-    // 4️⃣ Send email (non-blocking for invoice pipeline)
-    try {
-      await sendInvoiceEmail(order.email, pdfBuffer, buildInvoiceNumber(order), pdfUrl);
+      await sendInvoiceEmail(order.email, pdfBuffer, buildInvoiceNumber(order));
       emailSent = true;
     } catch (mailErr) {
       emailError = mailErr?.message || String(mailErr);
-      console.error("Email sending failed, but invoice was created:", emailError);
+      console.error("Email failed (invoice was created):", emailError);
     }
 
-    res.status(200).json({
+    // ✅ Respond to Shopify only after everything is done
+    return res.status(200).json({
       ok: true,
       invoiceId,
       invoiceNumber: buildInvoiceNumber(order),
-      pdfSourceUrl: pdfUrl,
       pdfDownloaded: Boolean(pdfBuffer),
       emailSent,
       emailError,
     });
+
   } catch (err) {
-    console.error("Webhook processing failed:", err);
-    res.status(500).send("Internal error");
+    console.error("Webhook processing failed:", err?.message || err);
+    if (!res.headersSent) {
+      res.status(500).send("Internal error");
+    }
   }
 }
