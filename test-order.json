@@ -15,7 +15,7 @@
   "line_items": [
     {
       "title": "Event ticket",
-      "quantity": 1,
+      "quantity": 5,
       "price": "123.00",
       "tax_lines": [{ "rate": 0.23, "price": "23.00" }]
     }

@@ -92,7 +92,9 @@ function extractStatuses(xml) {
 }
 
 function extractTagValue(xml, tagName) {
-  const match = xml.match(new RegExp(String.raw`<${tagName}>([^<]*)</${tagName}>`));
+  const match = xml.match(
+    new RegExp(String.raw`<${tagName}>([^<]*)</${tagName}>`),
+  );
   return match ? match[1] : null;
 }
 
@@ -101,14 +103,21 @@ function parseSaldeoError(xml) {
   if (status !== "ERROR") return null;
 
   const code = extractTagValue(xml, "ERROR_CODE") || "UNKNOWN";
-  const message = extractTagValue(xml, "ERROR_MESSAGE") || "Unknown Saldeo error";
+  const message =
+    extractTagValue(xml, "ERROR_MESSAGE") || "Unknown Saldeo error";
 
   if (code === "6001") {
-    console.error(`[Saldeo 6001] Permission denied: "${message}". Enable this permission in Saldeo user settings.`);
+    console.error(
+      `[Saldeo 6001] Permission denied: "${message}". Enable this permission in Saldeo user settings.`,
+    );
   } else if (code === "4000") {
-    console.error(`[Saldeo 4000] XSD validation error: "${message}". Check the XML structure.`);
+    console.error(
+      `[Saldeo 4000] XSD validation error: "${message}". Check the XML structure.`,
+    );
   } else if (code === "5000") {
-    console.warn(`[Saldeo 5000] Temporary server error: "${message}". Retrying...`);
+    console.warn(
+      `[Saldeo 5000] Temporary server error: "${message}". Retrying...`,
+    );
   } else {
     console.error(`[Saldeo ${code}] ${message}`);
   }
@@ -131,7 +140,12 @@ function wait(ms) {
 
 // Polls the Saldeo SOURCE URL until the PDF file becomes available.
 // Saldeo generates PDFs asynchronously after invoice creation (typically ~15–30 seconds).
-async function pollForPdf(pdfUrl, initialDelayMs = 5000, retryDelayMs = 5000, maxAttempts = 6) {
+async function pollForPdf(
+  pdfUrl,
+  initialDelayMs = 5000,
+  retryDelayMs = 5000,
+  maxAttempts = 6,
+) {
   await wait(initialDelayMs);
 
   for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
@@ -149,13 +163,18 @@ async function pollForPdf(pdfUrl, initialDelayMs = 5000, retryDelayMs = 5000, ma
       throw new Error(`Unexpected status ${pdfRes.status}`);
     } catch (err) {
       const status = err?.response?.status;
-      const retriable = !status || status === 404 || status === 429 || status >= 500;
+      const retriable =
+        !status || status === 404 || status === 429 || status >= 500;
 
       if (!retriable || attempt === maxAttempts) {
-        throw new Error(`PDF unavailable after ${attempt} attempts: ${err?.message}`);
+        throw new Error(
+          `PDF unavailable after ${attempt} attempts: ${err?.message}`,
+        );
       }
 
-      console.warn(`PDF poll ${attempt}/${maxAttempts}: HTTP ${status ?? "network error"}. Waiting ${retryDelayMs}ms...`);
+      console.warn(
+        `PDF poll ${attempt}/${maxAttempts}: HTTP ${status ?? "network error"}. Waiting ${retryDelayMs}ms...`,
+      );
       await wait(retryDelayMs);
     }
   }
@@ -169,24 +188,27 @@ async function createInvoiceWithRetry(invoiceXml, retries = 3, delayMs = 1500) {
   for (let attempt = 1; attempt <= retries; attempt += 1) {
     const createRes = await saldeoRequest(
       `/api/xml/3.0/invoice/add?company_program_id=${cleanEnv(process.env.SALDEO_COMPANY_PROGRAM_ID)}`,
-      invoiceXml
+      invoiceXml,
     );
 
-    console.log(`Saldeo invoice/add response (attempt ${attempt}/${retries}):`, createRes);
+    console.log(
+      `Saldeo invoice/add response (attempt ${attempt}/${retries}):`,
+      createRes,
+    );
 
     const invoiceAddError = parseSaldeoError(createRes);
     if (!invoiceAddError) return createRes;
 
     lastError = new Error(
       `Saldeo invoice/add failed [${invoiceAddError.code}] ${invoiceAddError.message}. ` +
-      `username=${cleanEnv(process.env.SALDEO_USERNAME)}, company_program_id=${cleanEnv(process.env.SALDEO_COMPANY_PROGRAM_ID)}`
+        `username=${cleanEnv(process.env.SALDEO_USERNAME)}, company_program_id=${cleanEnv(process.env.SALDEO_COMPANY_PROGRAM_ID)}`,
     );
 
     const retriable = invoiceAddError.code === "5000";
     if (!retriable || attempt === retries) break;
 
     console.warn(
-      `invoice/add temporary server error (attempt ${attempt}/${retries}). Retrying in ${delayMs}ms...`
+      `invoice/add temporary server error (attempt ${attempt}/${retries}). Retrying in ${delayMs}ms...`,
     );
     await wait(delayMs);
   }
@@ -262,7 +284,9 @@ function buildInvoiceXML(order, contractorId) {
     <DUE_DATE>${escapeXml(issueDate)}</DUE_DATE>
     <PURCHASER_CONTRACTOR_ID>${escapeXml(contractorId)}</PURCHASER_CONTRACTOR_ID>
     <CURRENCY_ISO4217>${escapeXml(order.currency || "PLN")}</CURRENCY_ISO4217>
-    <PAYMENT_TYPE>TRANSFER</PAYMENT_TYPE>
+    ${cleanEnv(process.env.SALDEO_CARD_PAYMENT_METHOD_ID)
+      ? `<PAYMENT_METHOD_ID>${escapeXml(cleanEnv(process.env.SALDEO_CARD_PAYMENT_METHOD_ID))}</PAYMENT_METHOD_ID>`
+      : `<PAYMENT_TYPE>CARD</PAYMENT_TYPE>`}
     <INVOICE_ITEMS>
       ${itemsXml}
     </INVOICE_ITEMS>
@@ -271,14 +295,17 @@ function buildInvoiceXML(order, contractorId) {
 }
 
 function buildInvoiceNumber(order) {
-  return `SHOP-${order.order_number}`;
+  return `NOWAMUZYKA-${order.order_number}`;
 }
 
 // =======================
 // Saldeo API request
 // =======================
 function cleanEnv(val) {
-  return (val || "").replace(/^"|"$/g, "").replace(/\\r|\\n/g, "").trim();
+  return (val || "")
+    .replace(/^"|"$/g, "")
+    .replace(/\\r|\\n/g, "")
+    .trim();
 }
 
 async function saldeoRequest(path, xml) {
@@ -298,7 +325,9 @@ async function saldeoRequest(path, xml) {
     for (const pair of queryStr.split("&")) {
       const eqIdx = pair.indexOf("=");
       if (eqIdx > 0) {
-        extraParams[pair.slice(0, eqIdx)] = decodeURIComponent(pair.slice(eqIdx + 1));
+        extraParams[pair.slice(0, eqIdx)] = decodeURIComponent(
+          pair.slice(eqIdx + 1),
+        );
       }
     }
   }
@@ -318,7 +347,9 @@ async function saldeoRequest(path, xml) {
     `username=${encodeURIComponent(username)}`,
     `req_id=${req_id}`,
     `req_sig=${req_sig}`,
-  ].filter(Boolean).join("&");
+  ]
+    .filter(Boolean)
+    .join("&");
 
   const url = `${baseUrl}${basePath}?${urlQuery}`;
 
@@ -347,28 +378,28 @@ async function sendInvoiceEmail(to, pdfBuffer, invoiceNumber) {
   });
   const text = pdfBuffer
     ? [
-        "Thank you for your purchase!",
-        `Invoice number: ${invoiceNumber}`,
-        "Your invoice PDF is attached.",
+        "Dziękujemy za zakup!",
+        `Numer faktury: ${invoiceNumber}`,
+        "Faktura w formacie PDF znajduje się w załączniku.",
       ].join("\n")
     : [
-        "Thank you for your purchase!",
-        `Invoice number: ${invoiceNumber}`,
-        "Your invoice has been created. Please contact us if you need a copy.",
+        "Dziękujemy za zakup!",
+        `Numer faktury: ${invoiceNumber}`,
+        "Faktura została wystawiona. W razie potrzeby uzyskania kopii prosimy o kontakt.",
       ].join("\n");
 
   const html = pdfBuffer
-    ? `<p>Thank you for your purchase!</p>
-<p>Invoice number: <strong>${escapeXml(invoiceNumber)}</strong></p>
-<p>Your invoice PDF is attached.</p>`
-    : `<p>Thank you for your purchase!</p>
-<p>Invoice number: <strong>${escapeXml(invoiceNumber)}</strong></p>
-<p>Your invoice has been created. Please contact us if you need a copy.</p>`;
+    ? `<p>Dziękujemy za zakup!</p>
+<p>Numer faktury: <strong>${escapeXml(invoiceNumber)}</strong></p>
+<p>Faktura w formacie PDF znajduje się w załączniku.</p>`
+    : `<p>Dziękujemy za zakup!</p>
+<p>Numer faktury: <strong>${escapeXml(invoiceNumber)}</strong></p>
+<p>Faktura została wystawiona. W razie potrzeby uzyskania kopii prosimy o kontakt.</p>`;
 
   const mail = {
-    from: `"Your Company" <${cleanEnv(process.env.SMTP_USER)}>`,
+    from: `"Nowa Muzyka" <${cleanEnv(process.env.SMTP_USER)}>`  ,
     to,
-    subject: `Your invoice ${invoiceNumber}`,
+    subject: `Faktura ${invoiceNumber}`,
     text,
     html,
   };
@@ -383,7 +414,11 @@ async function sendInvoiceEmail(to, pdfBuffer, invoiceNumber) {
   }
 
   const info = await transporter.sendMail(mail);
-  console.log("Email sent:", { to, messageId: info.messageId, hasAttachment: Boolean(pdfBuffer) });
+  console.log("Email sent:", {
+    to,
+    messageId: info.messageId,
+    hasAttachment: Boolean(pdfBuffer),
+  });
 }
 
 // =======================
@@ -404,7 +439,9 @@ export default async function handler(req, res) {
   const rawBody = await readRawBody(req);
   const hmac = req.headers["x-shopify-hmac-sha256"];
 
-  if (!verifyShopifyWebhook(rawBody, hmac, process.env.SHOPIFY_WEBHOOK_SECRET)) {
+  if (
+    !verifyShopifyWebhook(rawBody, hmac, process.env.SHOPIFY_WEBHOOK_SECRET)
+  ) {
     console.error("Invalid Shopify webhook signature");
     return res.status(401).send("Invalid webhook");
   }
@@ -417,14 +454,23 @@ export default async function handler(req, res) {
   }
 
   const orderId = String(order.id);
-  console.log("Paid order received:", order.order_number, "| Shopify ID:", orderId);
+  console.log(
+    "Paid order received:",
+    order.order_number,
+    "| Shopify ID:",
+    orderId,
+  );
 
   // Idempotency: skip if this function instance already handled this order
   // (guards against rapid Shopify retries before a cold start resets state)
   if (processedOrders.has(orderId)) {
     const existingInvoiceId = processedOrders.get(orderId);
-    console.log(`Duplicate webhook for order ${order.order_number}. Invoice ID: ${existingInvoiceId}`);
-    return res.status(200).json({ ok: true, duplicate: true, invoiceId: existingInvoiceId });
+    console.log(
+      `Duplicate webhook for order ${order.order_number}. Invoice ID: ${existingInvoiceId}`,
+    );
+    return res
+      .status(200)
+      .json({ ok: true, duplicate: true, invoiceId: existingInvoiceId });
   }
 
   try {
@@ -437,20 +483,30 @@ export default async function handler(req, res) {
     const contractorXml = buildContractorMergeXML(order);
     const contractorRes = await saldeoRequest(
       `/api/xml/1.0/contractor/merge?company_program_id=${cleanEnv(process.env.SALDEO_COMPANY_PROGRAM_ID)}`,
-      contractorXml
+      contractorXml,
     );
 
     const contractorStatus = extractStatuses(contractorRes).find((s) =>
-      ["CREATED", "MERGED", "CONFLICT", "RECREATED", "NOT_VALID"].includes(s)
+      ["CREATED", "MERGED", "CONFLICT", "RECREATED", "NOT_VALID"].includes(s),
     );
     if (contractorStatus === "CONFLICT" || contractorStatus === "NOT_VALID") {
-      throw new Error(`contractor/merge failed: ${contractorStatus}. Response: ${contractorRes}`);
+      throw new Error(
+        `contractor/merge failed: ${contractorStatus}. Response: ${contractorRes}`,
+      );
     }
 
-    const contractorIdMatch = contractorRes.match(/<CONTRACTOR_ID>([^<]+)<\/CONTRACTOR_ID>/);
-    if (!contractorIdMatch) throw new Error("No CONTRACTOR_ID in Saldeo response: " + contractorRes);
+    const contractorIdMatch = contractorRes.match(
+      /<CONTRACTOR_ID>([^<]+)<\/CONTRACTOR_ID>/,
+    );
+    if (!contractorIdMatch)
+      throw new Error("No CONTRACTOR_ID in Saldeo response: " + contractorRes);
     const contractorId = contractorIdMatch[1];
-    console.log("contractor/merge:", contractorStatus, "| CONTRACTOR_ID:", contractorId);
+    console.log(
+      "contractor/merge:",
+      contractorStatus,
+      "| CONTRACTOR_ID:",
+      contractorId,
+    );
 
     // 2️⃣ invoice/add
     const invoiceXml = buildInvoiceXML(order, contractorId);
@@ -458,7 +514,8 @@ export default async function handler(req, res) {
     const createRes = await createInvoiceWithRetry(invoiceXml);
 
     const invoiceIdMatch = createRes.match(/<INVOICE_ID>([^<]+)<\/INVOICE_ID>/);
-    if (!invoiceIdMatch) throw new Error("No INVOICE_ID in Saldeo response: " + createRes);
+    if (!invoiceIdMatch)
+      throw new Error("No INVOICE_ID in Saldeo response: " + createRes);
     const invoiceId = invoiceIdMatch[1];
     console.log("invoice/add OK | INVOICE_ID:", invoiceId);
 
@@ -479,11 +536,13 @@ export default async function handler(req, res) {
 </ROOT>`;
       const listRes = await saldeoRequest(
         `/api/xml/3.0/invoice/listbyid?company_program_id=${cleanEnv(process.env.SALDEO_COMPANY_PROGRAM_ID)}`,
-        listXml
+        listXml,
       );
       const listError = parseSaldeoError(listRes);
       if (listError) {
-        console.warn(`invoice/listbyid error [${listError.code}]: ${listError.message}`);
+        console.warn(
+          `invoice/listbyid error [${listError.code}]: ${listError.message}`,
+        );
       } else {
         const pdfUrlMatch = listRes.match(/<SOURCE>(.*?)<\/SOURCE>/);
         pdfUrl = pdfUrlMatch ? decodeXmlEntities(pdfUrlMatch[1]) : null;
@@ -525,7 +584,6 @@ export default async function handler(req, res) {
       emailSent,
       emailError,
     });
-
   } catch (err) {
     console.error("Webhook processing failed:", err?.message || err);
     if (!res.headersSent) {

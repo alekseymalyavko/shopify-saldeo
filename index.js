@@ -95,7 +95,7 @@ function buildInvoiceXML(order) {
 <ROOT>
   <INVOICES>
     <INVOICE>
-      <NUMBER>SHOP-${order.order_number}</NUMBER>
+      <NUMBER>NOWAMUZYKA-${order.order_number}</NUMBER>
       <ISSUE_DATE>${issueDate}</ISSUE_DATE>
       <SALE_DATE>${issueDate}</SALE_DATE>
       <PAYMENT_METHOD>Online payment</PAYMENT_METHOD>
@@ -226,7 +226,7 @@ app.post("/webhook/shopify/order-paid", async (req, res) => {
     const pdfBuffer = Buffer.from(pdfRes.data);
 
     // 3️⃣ Send email
-    await sendInvoiceEmail(order.email, pdfBuffer, `SHOP-${order.order_number}`);
+    await sendInvoiceEmail(order.email, pdfBuffer, `NOWAMUZYKA-${order.order_number}`);
 
     res.status(200).send("OK");
   } catch (err) {
