@@ -433,8 +433,38 @@ function readRawBody(req) {
   });
 }
 
+function createRequestId() {
+  return `${Date.now()}-${crypto.randomBytes(4).toString("hex")}`;
+}
+
+function logEvent(level, context, event, details = {}) {
+  const payload = {
+    ts: new Date().toISOString(),
+    level,
+    event,
+    requestId: context?.requestId || null,
+    orderId: context?.orderId || null,
+    orderNumber: context?.orderNumber || null,
+    invoiceId: context?.invoiceId || null,
+    ...details,
+  };
+
+  const line = JSON.stringify(payload);
+  if (level === "error") {
+    console.error(line);
+    return;
+  }
+  if (level === "warn") {
+    console.warn(line);
+    return;
+  }
+  console.log(line);
+}
+
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).send("Method not allowed");
+
+  const requestId = createRequestId();
 
   const rawBody = await readRawBody(req);
   const hmac = req.headers["x-shopify-hmac-sha256"];
@@ -442,7 +472,7 @@ export default async function handler(req, res) {
   if (
     !verifyShopifyWebhook(rawBody, hmac, process.env.SHOPIFY_WEBHOOK_SECRET)
   ) {
-    console.error("Invalid Shopify webhook signature");
+    logEvent("warn", { requestId }, "webhook.invalid_signature");
     return res.status(401).send("Invalid webhook");
   }
 
@@ -450,31 +480,39 @@ export default async function handler(req, res) {
   try {
     order = JSON.parse(rawBody.toString("utf8"));
   } catch {
+    logEvent("warn", { requestId }, "webhook.invalid_json");
     return res.status(400).send("Bad request: invalid JSON");
   }
 
   const orderId = String(order.id);
-  console.log(
-    "Paid order received:",
-    order.order_number,
-    "| Shopify ID:",
+  const context = {
+    requestId,
     orderId,
-  );
+    orderNumber: order.order_number,
+    invoiceId: null,
+  };
+
+  logEvent("info", context, "webhook.received", {
+    email: order.email || null,
+    totalPrice: order.total_price || null,
+    currency: order.currency || null,
+  });
 
   // Idempotency: skip if this function instance already handled this order
   // (guards against rapid Shopify retries before a cold start resets state)
   if (processedOrders.has(orderId)) {
     const existingInvoiceId = processedOrders.get(orderId);
-    console.log(
-      `Duplicate webhook for order ${order.order_number}. Invoice ID: ${existingInvoiceId}`,
-    );
+    context.invoiceId = existingInvoiceId;
+    logEvent("info", context, "webhook.duplicate", {
+      duplicate: true,
+    });
     return res
       .status(200)
       .json({ ok: true, duplicate: true, invoiceId: existingInvoiceId });
   }
 
   try {
-    console.log("Saldeo context:", {
+    logEvent("info", context, "saldeo.context", {
       username: cleanEnv(process.env.SALDEO_USERNAME),
       company_program_id: cleanEnv(process.env.SALDEO_COMPANY_PROGRAM_ID),
     });
@@ -501,23 +539,26 @@ export default async function handler(req, res) {
     if (!contractorIdMatch)
       throw new Error("No CONTRACTOR_ID in Saldeo response: " + contractorRes);
     const contractorId = contractorIdMatch[1];
-    console.log(
-      "contractor/merge:",
+    logEvent("info", context, "contractor.merge.success", {
       contractorStatus,
-      "| CONTRACTOR_ID:",
       contractorId,
-    );
+    });
 
     // 2️⃣ invoice/add
     const invoiceXml = buildInvoiceXML(order, contractorId);
-    console.log("invoice/add number:", buildInvoiceNumber(order));
+    logEvent("info", context, "invoice.add.start", {
+      invoiceNumber: buildInvoiceNumber(order),
+    });
     const createRes = await createInvoiceWithRetry(invoiceXml);
 
     const invoiceIdMatch = createRes.match(/<INVOICE_ID>([^<]+)<\/INVOICE_ID>/);
     if (!invoiceIdMatch)
       throw new Error("No INVOICE_ID in Saldeo response: " + createRes);
     const invoiceId = invoiceIdMatch[1];
-    console.log("invoice/add OK | INVOICE_ID:", invoiceId);
+    context.invoiceId = invoiceId;
+    logEvent("info", context, "invoice.add.success", {
+      invoiceId,
+    });
 
     // Mark order as processed to block duplicates on rapid retries
     processedOrders.set(orderId, invoiceId);
@@ -540,28 +581,39 @@ export default async function handler(req, res) {
       );
       const listError = parseSaldeoError(listRes);
       if (listError) {
-        console.warn(
-          `invoice/listbyid error [${listError.code}]: ${listError.message}`,
-        );
+        logEvent("warn", context, "invoice.listbyid.error", {
+          errorCode: listError.code,
+          errorMessage: listError.message,
+        });
       } else {
         const pdfUrlMatch = listRes.match(/<SOURCE>(.*?)<\/SOURCE>/);
         pdfUrl = pdfUrlMatch ? decodeXmlEntities(pdfUrlMatch[1]) : null;
-        console.log("invoice/listbyid OK | SOURCE:", pdfUrl);
+        logEvent("info", context, "invoice.listbyid.success", {
+          hasSource: Boolean(pdfUrl),
+        });
       }
     } catch (listErr) {
-      console.warn("invoice/listbyid failed (non-fatal):", listErr?.message);
+      logEvent("warn", context, "invoice.listbyid.exception", {
+        message: listErr?.message || String(listErr),
+      });
     }
 
     // 4️⃣ Poll for PDF — waits until Saldeo generates the file
     let pdfBuffer = null;
     if (pdfUrl) {
       try {
+        logEvent("info", context, "pdf.poll.start");
         pdfBuffer = await pollForPdf(pdfUrl);
+        logEvent("info", context, "pdf.poll.success", {
+          bytes: pdfBuffer?.length || 0,
+        });
       } catch (pollErr) {
-        console.warn("PDF not ready after polling:", pollErr?.message);
+        logEvent("warn", context, "pdf.poll.failed", {
+          message: pollErr?.message || String(pollErr),
+        });
       }
     } else {
-      console.warn("No SOURCE URL available — skipping PDF download");
+      logEvent("warn", context, "pdf.source.missing");
     }
 
     // 5️⃣ Send email (with PDF attachment if available, plain text if not)
@@ -570,12 +622,23 @@ export default async function handler(req, res) {
     try {
       await sendInvoiceEmail(order.email, pdfBuffer, buildInvoiceNumber(order));
       emailSent = true;
+      logEvent("info", context, "email.send.success", {
+        to: order.email || null,
+        hasAttachment: Boolean(pdfBuffer),
+      });
     } catch (mailErr) {
       emailError = mailErr?.message || String(mailErr);
-      console.error("Email failed (invoice was created):", emailError);
+      logEvent("error", context, "email.send.failed", {
+        message: emailError,
+      });
     }
 
     // ✅ Respond to Shopify only after everything is done
+    logEvent("info", context, "webhook.completed", {
+      pdfDownloaded: Boolean(pdfBuffer),
+      emailSent,
+      emailError,
+    });
     return res.status(200).json({
       ok: true,
       invoiceId,
@@ -585,7 +648,9 @@ export default async function handler(req, res) {
       emailError,
     });
   } catch (err) {
-    console.error("Webhook processing failed:", err?.message || err);
+    logEvent("error", context, "webhook.failed", {
+      message: err?.message || String(err),
+    });
     if (!res.headersSent) {
       res.status(500).send("Internal error");
     }
