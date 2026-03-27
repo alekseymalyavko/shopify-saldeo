@@ -1,0 +1,96 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "custom_liquid_JzCJha": {
+      "type": "custom-liquid",
+      "name": "t:sections.custom-liquid.presets.name",
+      "settings": {
+        "custom_liquid": "<script>\nfunction uncheckConsent() {\n  // Szukamy po różnych selektorach\n  const checkbox = document.querySelector('input[name=\"emailConsent\"]') \n    || document.querySelector('input[id*=\"emailConsent\"]')\n    || document.querySelector('input[aria-label*=\"newsletter\"]')\n    || document.querySelector('._checkboxInput_1hja3_38');\n  \n  if (checkbox) {\n    checkbox.checked = false;\n    checkbox.removeAttribute('checked');\n    console.log('Checkbox odznaczony!');\n  } else {\n    console.log('Nie znaleziono checkboxa');\n  }\n}\n\n// Próbujemy kilka razy z opóźnieniem\ndocument.addEventListener('DOMContentLoaded', uncheckConsent);\nsetTimeout(uncheckConsent, 500);\nsetTimeout(uncheckConsent, 1000);\nsetTimeout(uncheckConsent, 2000);\nsetTimeout(uncheckConsent, 3000);\n\n// Obserwujemy zmiany w DOM (dla formularzy ładowanych dynamicznie)\nconst observer = new MutationObserver(function(mutations) {\n  uncheckConsent();\n});\n\nobserver.observe(document.body, { childList: true, subtree: true });\n\n// Zatrzymaj observer po 5 sekundach\nsetTimeout(() => observer.disconnect(), 5000);\n</script>",
+        "color_scheme": "",
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
+    "f69c7709-a1da-4cdf-8642-e2e83b7f357d": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "padding_top": 20,
+        "padding_bottom": 4
+      }
+    },
+    "rich_text_jFXe6X": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_8aXbpp": {
+          "type": "heading",
+          "settings": {
+            "heading": "{{ page.title }}",
+            "heading_size": "h1"
+          }
+        },
+        "text_TA9Urb": {
+          "type": "text",
+          "settings": {
+            "text": ""
+          }
+        }
+      },
+      "block_order": [
+        "heading_8aXbpp",
+        "text_TA9Urb"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-7b41f1a0-089c-42d5-be23-43f1775fee89",
+        "full_width": true,
+        "padding_top": 36,
+        "padding_bottom": 0
+      }
+    },
+    "forms": {
+      "type": "apps",
+      "blocks": {
+        "0bd5bfd4-4565-4bed-a9b7-caf36c17b87a": {
+          "type": "shopify://apps/forms/blocks/inline/8744a304-fcb1-4347-b211-bb6b4759a76a",
+          "settings": {
+            "form_id": "765674",
+            "text_color": "#ffffff",
+            "button_background_color": "#00b388",
+            "button_label_color": "#ffffff",
+            "links_color": "#ffffff",
+            "errors_color": "#e02229",
+            "text_alignment": "center",
+            "form_alignment": "center",
+            "padding_top": 64,
+            "padding_bottom": 64,
+            "padding_right": 10,
+            "padding_left": 11
+          }
+        }
+      },
+      "block_order": [
+        "0bd5bfd4-4565-4bed-a9b7-caf36c17b87a"
+      ],
+      "settings": {
+        "include_margins": true
+      }
+    }
+  },
+  "order": [
+    "custom_liquid_JzCJha",
+    "f69c7709-a1da-4cdf-8642-e2e83b7f357d",
+    "rich_text_jFXe6X",
+    "forms"
+  ]
+}

@@ -1,0 +1,316 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "rich_text_g3EeVH": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_Hi8mny": {
+          "type": "heading",
+          "settings": {
+            "heading": "A było to tak...",
+            "heading_size": "h1"
+          }
+        },
+        "heading_M4V6jy": {
+          "type": "heading",
+          "settings": {
+            "heading": "<strong>Autechre. Flying Lotus. Bonobo. Fever Ray. Amon Tobin.</strong>",
+            "heading_size": "h2"
+          }
+        },
+        "text_RHLpUg": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Wszyscy zagrali w Polsce po raz pierwszy właśnie tutaj. Od 2006 roku Tauron Nowa Muzyka Katowice wyławia artystów, zanim trafią do mainstreamu – i zaprasza ich do jednej z najbardziej charakterystycznych lokalizacji festiwalowych w Europie.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_Hi8mny",
+        "heading_M4V6jy",
+        "text_RHLpUg"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
+    "slideshow_yPY9WV": {
+      "type": "slideshow",
+      "blocks": {
+        "slide_CYQdNr": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/481679985_1176575380523134_8764130328973408734_n.jpg",
+            "image_overlay_opacity": 0,
+            "overlay_top_text": "",
+            "overlay_image_size": 25,
+            "overlay_bottom_text": "",
+            "button_label": "",
+            "link": "",
+            "button_style_secondary": false,
+            "show_text_box": false,
+            "box_align": "middle-center",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": ""
+          }
+        },
+        "slide_iGUU6j": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/468544649_10170173039335077_7256832244137810417_n.jpg",
+            "image_overlay_opacity": 0,
+            "overlay_top_text": "",
+            "overlay_image_size": 40,
+            "overlay_bottom_text": "",
+            "button_label": "",
+            "link": "",
+            "button_style_secondary": false,
+            "show_text_box": false,
+            "box_align": "middle-center",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-1"
+          }
+        },
+        "slide_jc8iUr": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/481184944_1176577143856291_5138034632269727660_n_cc3a0af4-a348-4878-97f9-db6d0aeb8b08.jpg",
+            "image_overlay_opacity": 0,
+            "overlay_top_text": "",
+            "overlay_image_size": 40,
+            "overlay_bottom_text": "",
+            "button_label": "",
+            "link": "",
+            "button_style_secondary": false,
+            "show_text_box": false,
+            "box_align": "middle-center",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-1"
+          }
+        },
+        "slide_77B9gj": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/479988385_1166403644873641_8617417421050525463_n_c1dc36a9-17f8-416f-97a9-4554585bdb8b.jpg",
+            "image_overlay_opacity": 0,
+            "overlay_top_text": "",
+            "overlay_image_size": 40,
+            "overlay_bottom_text": "",
+            "button_label": "",
+            "link": "",
+            "button_style_secondary": false,
+            "show_text_box": false,
+            "box_align": "middle-center",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-1"
+          }
+        },
+        "slide_JQkFQK": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/481249673_1176577083856297_1261909288813451250_n_5652cb0b-5fa4-4347-94c5-888d252ff815.jpg",
+            "image_overlay_opacity": 0,
+            "overlay_top_text": "",
+            "overlay_image_size": 40,
+            "overlay_bottom_text": "",
+            "button_label": "",
+            "link": "",
+            "button_style_secondary": false,
+            "show_text_box": false,
+            "box_align": "middle-center",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": ""
+          }
+        }
+      },
+      "block_order": [
+        "slide_CYQdNr",
+        "slide_iGUU6j",
+        "slide_jc8iUr",
+        "slide_77B9gj",
+        "slide_JQkFQK"
+      ],
+      "name": "t:sections.slideshow.presets.name",
+      "settings": {
+        "layout": "full_bleed",
+        "slide_height": "small",
+        "slider_visual": "dots",
+        "auto_rotate": true,
+        "change_slides_speed": 5,
+        "image_behavior": "ambient",
+        "show_text_below": true,
+        "accessibility_info": "Pokaz slajdów z historycznych edycji festiwalu"
+      }
+    },
+    "rich_text_C6q8ti": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_z4RKWH": {
+          "type": "heading",
+          "settings": {
+            "heading": "<strong>Wszystko zaczęło się od grupy przyjaciół z klubu Hipnoza.</strong>",
+            "heading_size": "h2"
+          }
+        },
+        "text_Q4AHDC": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Pierwsza edycja. Nieczynny szyb kopalni Wilson. DJ Krush, Swayzak, Cristian Vogel na scenie. Przepis okazał się prosty. Brzmienia z pogranicza jazzu, elektroniki i tanecznych rytmów. Konsekwentne ignorowanie mainstreamowych playlist. Publiczność, która dokładnie tego szukała.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_z4RKWH",
+        "text_Q4AHDC"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
+    "rich_text_rThYpj": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_CayM7d": {
+          "type": "heading",
+          "settings": {
+            "heading": "<strong>Festiwal, który łączy industrialną przeszłość z futurystycznym brzmieniem.</strong>",
+            "heading_size": "h2"
+          }
+        },
+        "text_YAeC6A": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Sceny rozstawione między halami kopalni, salą koncertową NOSPR i podziemiami Muzeum Śląskiego. Awangardowa elektronika odbijająca się od ceglanych ścian i stalowych konstrukcji.</p><p>To połączenie definiuje Katowice – miasto, które swoją przemysłową historię przekuło w kulturalną energię.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_CayM7d",
+        "text_YAeC6A"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
+    "image_banner_Xfwryy": {
+      "type": "image-banner",
+      "name": "t:sections.image-banner.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/481248936_1176586633855342_5743651079500377941_n_51441273-6c00-4abe-94bf-1827522137ec.jpg",
+        "image_2": "shopify://shop_images/480563188_1166403738206965_6928428404091059273_n.jpg",
+        "image_overlay_opacity": 0,
+        "image_height": "small",
+        "image_behavior": "none",
+        "desktop_content_position": "middle-center",
+        "desktop_content_alignment": "center",
+        "show_text_box": false,
+        "color_scheme": "",
+        "stack_images_on_mobile": true,
+        "mobile_content_alignment": "center",
+        "show_text_below": true
+      }
+    },
+    "multicolumn_N7EJiz": {
+      "type": "multicolumn",
+      "blocks": {
+        "column_iDncC8": {
+          "type": "column",
+          "settings": {
+            "title": "Kolumna",
+            "text": "<p>Połącz tekst z obrazem, aby skierować uwagę na wybrany produkt, kolekcję lub wpis na blogu. Dodaj szczegóły dotyczące dostępności, stylu lub dołącz recenzję.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_RqdLrE": {
+          "type": "column",
+          "settings": {
+            "title": "Kolumna",
+            "text": "<p>Połącz tekst z obrazem, aby skierować uwagę na wybrany produkt, kolekcję lub wpis na blogu. Dodaj szczegóły dotyczące dostępności, stylu lub dołącz recenzję.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_rEYMbb": {
+          "type": "column",
+          "settings": {
+            "title": "Kolumna",
+            "text": "<p>Połącz tekst z obrazem, aby skierować uwagę na wybrany produkt, kolekcję lub wpis na blogu. Dodaj szczegóły dotyczące dostępności, stylu lub dołącz recenzję.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "column_iDncC8",
+        "column_RqdLrE",
+        "column_rEYMbb"
+      ],
+      "name": "t:sections.multicolumn.presets.name",
+      "settings": {
+        "title": "Wielokolumnowy",
+        "heading_size": "h1",
+        "image_width": "full",
+        "image_ratio": "adapt",
+        "button_label": "",
+        "button_link": "",
+        "columns_desktop": 3,
+        "column_alignment": "left",
+        "background_style": "primary",
+        "color_scheme": "",
+        "columns_mobile": "1",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "main",
+    "rich_text_g3EeVH",
+    "slideshow_yPY9WV",
+    "rich_text_C6q8ti",
+    "rich_text_rThYpj",
+    "image_banner_Xfwryy",
+    "multicolumn_N7EJiz"
+  ]
+}

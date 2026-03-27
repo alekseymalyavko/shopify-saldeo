@@ -1,0 +1,66 @@
+/* ==========================================================================
+   GT PRESSURA - WSZYSTKIE WARIANTY
+   ========================================================================== */
+
+@font-face {
+  font-family: 'GTPressura-Light';
+  src: url('https://cdn.shopify.com/s/files/1/0935/2695/0216/files/GTPressura-Light.woff2?v=1764160087') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GTPressura-LightItalic';
+  src: url('https://cdn.shopify.com/s/files/1/0935/2695/0216/files/GTPressura-LightItalic.woff2?v=1764160087') format('woff2');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GTPressura-Regular';
+  src: url('https://cdn.shopify.com/s/files/1/0935/2695/0216/files/GTPressura-Regular.woff2?v=1764160088') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GTPressura-RegularItalic';
+  src: url('https://cdn.shopify.com/s/files/1/0935/2695/0216/files/GTPressura-RegularItalic.woff2?v=1764160087') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GTPressura-Bold';
+  src: url('https://cdn.shopify.com/s/files/1/0935/2695/0216/files/GTPressura-Bold.woff2?v=1764160087') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GTPressura-BoldItalic';
+  src: url('https://cdn.shopify.com/s/files/1/0935/2695/0216/files/GTPressura-BoldItalic.woff2?v=1764160087') format('woff2');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@media screen and (max-width: 749px) {
+  .header__heading-logo {
+    width: var(--logo-width-mobile) !important;
+    height: auto !important;
+  }
+}
+@media screen and (max-width: 749px) {
+  .header__heading-logo,
+  .header__heading-logo-wrapper {
+    width: var(--logo-width-mobile) !important;
+    max-width: none !important;
+    height: auto !important;
+  }
+}

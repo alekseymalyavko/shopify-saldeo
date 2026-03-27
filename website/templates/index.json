@@ -1,0 +1,499 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "slideshow_R7rxyx": {
+      "type": "slideshow",
+      "blocks": {
+        "slide_yccmPH": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/480969126_1176586640522008_7250643772793978666_n_eb967869-7555-4066-aa05-5eec4eca5f64.jpg",
+            "image_overlay_opacity": 40,
+            "overlay_top_icon": "shopify://shop_images/Projekt_bez_nazwy_2.svg",
+            "overlay_top_text": "4 - 7 CZERWCA 2026",
+            "overlay_image": "shopify://shop_images/PNG_LEVELED_BIALE.png",
+            "overlay_image_size": 80,
+            "overlay_bottom_icon": "shopify://shop_images/Projekt_bez_nazwy_1.svg",
+            "overlay_bottom_text": "KATOWICE - STREFA KULTURY",
+            "button_label": "",
+            "link": "#",
+            "button_style_secondary": true,
+            "show_text_box": false,
+            "box_align": "bottom-center",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-4"
+          }
+        }
+      },
+      "block_order": [
+        "slide_yccmPH"
+      ],
+      "custom_css": [
+        ".slideshow__controls.slideshow__controls--top {display: none !important;}"
+      ],
+      "name": "t:sections.slideshow.presets.name",
+      "settings": {
+        "layout": "full_bleed",
+        "slide_height": "medium",
+        "slider_visual": "dots",
+        "auto_rotate": true,
+        "change_slides_speed": 5,
+        "image_behavior": "ambient",
+        "show_text_below": false,
+        "accessibility_info": ""
+      }
+    },
+    "featured_product_7E76Et": {
+      "type": "featured-product",
+      "blocks": {
+        "custom_liquid_D69wCz": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": ""
+          }
+        },
+        "title_RzeY9R": {
+          "type": "title",
+          "settings": {
+            "heading_size": "h2"
+          }
+        },
+        "text_ig6RVi": {
+          "type": "text",
+          "settings": {
+            "text": "5–6 czerwca 2026 (piątek–sobota)",
+            "text_style": "uppercase"
+          }
+        },
+        "price_yqgtkP": {
+          "type": "price",
+          "settings": {}
+        },
+        "quantity_selector_PNARNF": {
+          "type": "quantity_selector",
+          "settings": {}
+        },
+        "buy_buttons_6GzWde": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": false,
+            "show_gift_card_recipient": false
+          }
+        }
+      },
+      "block_order": [
+        "custom_liquid_D69wCz",
+        "title_RzeY9R",
+        "text_ig6RVi",
+        "price_yqgtkP",
+        "quantity_selector_PNARNF",
+        "buy_buttons_6GzWde"
+      ],
+      "custom_css": [],
+      "name": "t:sections.featured-product.presets.name",
+      "settings": {
+        "product": "karnet-2-dniowy-26",
+        "color_scheme": "scheme-b5eb31db-60ea-472f-b048-2883c9973722",
+        "secondary_background": false,
+        "media_size": "small",
+        "constrain_to_viewport": true,
+        "media_fit": "cover",
+        "media_position": "right",
+        "image_zoom": "none",
+        "hide_variants": false,
+        "enable_video_looping": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "featured_product_mwaKJK": {
+      "type": "featured-product",
+      "blocks": {
+        "custom_liquid_8bVDRT": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": ""
+          }
+        },
+        "title_BPnETm": {
+          "type": "title",
+          "settings": {
+            "heading_size": "h2"
+          }
+        },
+        "text_FUKE8d": {
+          "type": "text",
+          "settings": {
+            "text": "5 czerwca 2026",
+            "text_style": "uppercase"
+          }
+        },
+        "price_fq3NkB": {
+          "type": "price",
+          "settings": {}
+        },
+        "quantity_selector_gtmw8B": {
+          "type": "quantity_selector",
+          "settings": {}
+        },
+        "buy_buttons_k8armC": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": false,
+            "show_gift_card_recipient": false
+          }
+        }
+      },
+      "block_order": [
+        "custom_liquid_8bVDRT",
+        "title_BPnETm",
+        "text_FUKE8d",
+        "price_fq3NkB",
+        "quantity_selector_gtmw8B",
+        "buy_buttons_k8armC"
+      ],
+      "custom_css": [],
+      "name": "t:sections.featured-product.presets.name",
+      "settings": {
+        "product": "bilet-piatek-5-06",
+        "color_scheme": "scheme-4",
+        "secondary_background": false,
+        "media_size": "small",
+        "constrain_to_viewport": true,
+        "media_fit": "cover",
+        "media_position": "right",
+        "image_zoom": "none",
+        "hide_variants": false,
+        "enable_video_looping": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "featured_product_RKLgkt": {
+      "type": "featured-product",
+      "blocks": {
+        "custom_liquid_4JHpcG": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": ""
+          }
+        },
+        "title_yKwkzh": {
+          "type": "title",
+          "settings": {
+            "heading_size": "h2"
+          }
+        },
+        "text_Ptb47D": {
+          "type": "text",
+          "settings": {
+            "text": "6 czerwca 2026",
+            "text_style": "uppercase"
+          }
+        },
+        "price_bKqk9j": {
+          "type": "price",
+          "settings": {}
+        },
+        "quantity_selector_r8FJxd": {
+          "type": "quantity_selector",
+          "settings": {}
+        },
+        "buy_buttons_ygX7NX": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": false,
+            "show_gift_card_recipient": false
+          }
+        }
+      },
+      "block_order": [
+        "custom_liquid_4JHpcG",
+        "title_yKwkzh",
+        "text_Ptb47D",
+        "price_bKqk9j",
+        "quantity_selector_r8FJxd",
+        "buy_buttons_ygX7NX"
+      ],
+      "custom_css": [],
+      "name": "t:sections.featured-product.presets.name",
+      "settings": {
+        "product": "bilet-sobota-6-06",
+        "color_scheme": "scheme-b5eb31db-60ea-472f-b048-2883c9973722",
+        "secondary_background": false,
+        "media_size": "small",
+        "constrain_to_viewport": true,
+        "media_fit": "cover",
+        "media_position": "right",
+        "image_zoom": "none",
+        "hide_variants": false,
+        "enable_video_looping": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "custom_liquid_kVdRjT": {
+      "type": "custom-liquid",
+      "name": "t:sections.custom-liquid.presets.name",
+      "settings": {
+        "custom_liquid": "<div class=\"ticket-section\">\n  <h3>Wolisz kupić tam, gdzie zawsze?</h3>\n  <p>\n    Zarezerwuj swoje miejsce na\n    TAURON NOWA MUZYKA KATOWICE '26\n  </p>\n\n  <div class=\"ticket-buttons\">\n    <a href=\"https://www.ebilet.pl/muzyka/festiwale/tauron-nowa-muzyka\" \n       target=\"_blank\" \n       rel=\"noopener\"\n       class=\"button button--secondary ticket-btn\">\n      eBilet →\n    </a>\n    \n    <a href=\"https://www.biletomat.pl/bilety/tauron-nowa-muzyka-katowice-2026-katowice-238969/\" \n       target=\"_blank\" \n       rel=\"noopener\"\n       class=\"button button--secondary ticket-btn\">\nBiletomat →\n    </a>\n  </div>\n</div>\n\n<style>\n  .ticket-section {\n    text-align: center !important;\n  }\n\n  @media (max-width: 749px) {\n    .ticket-section {\n      padding-left: 1.5rem !important;\n      padding-right: 1.5rem !important;\n    }\n  }\n\n  .ticket-buttons {\n    display: flex !important;\n    gap: 1rem !important;\n    margin-top: 1rem !important;\n    justify-content: center !important;\n    flex-direction: column !important;\n    align-items: stretch !important;\n    width: max-content !important;\n    margin-left: auto !important;\n    margin-right: auto !important;\n  }\n\n  .ticket-btn {\n    display: flex !important;\n    flex: 1 0 auto !important;\n    justify-content: center !important;\n    text-align: center !important;\n    white-space: nowrap !important;\n    /* opcjonalnie:\n    min-width: 160px !important;\n    */\n  }\n\n  @media (min-width: 750px) {\n    .ticket-buttons {\n      flex-direction: row !important;\n    }\n  }\n</style>",
+        "color_scheme": "scheme-2",
+        "padding_top": 8,
+        "padding_bottom": 48
+      }
+    },
+    "logo_partners_7bWn37": {
+      "type": "logo-partners",
+      "blocks": {
+        "group_header_MHJkVX": {
+          "type": "group_header",
+          "settings": {
+            "title": "Sponsorzy",
+            "separator": false
+          }
+        },
+        "logo_HDc846": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/tauron.svg",
+            "alt_text": "",
+            "link": "https://www.tauron.pl/dla-domu"
+          }
+        },
+        "logo_t9QLLb": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/lech.svg",
+            "alt_text": "",
+            "link": "https://lech.pl/"
+          }
+        },
+        "group_header_YUcEVX": {
+          "type": "group_header",
+          "settings": {
+            "title": "Organizatorzy",
+            "separator": false
+          }
+        },
+        "logo_bLQAC3": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/fundacja_tnmk.svg",
+            "alt_text": "",
+            "link": ""
+          }
+        },
+        "logo_BNBUce": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/more_music.svg",
+            "alt_text": "",
+            "link": ""
+          }
+        },
+        "group_header_A8iFXf": {
+          "type": "group_header",
+          "settings": {
+            "title": "Współgospodarze",
+            "separator": false
+          }
+        },
+        "logo_8BkeDi": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/katowice.svg",
+            "alt_text": "",
+            "link": "https://www.katowice.eu/"
+          }
+        },
+        "group_header_8V8eeg": {
+          "type": "group_header",
+          "settings": {
+            "title": "Partnerzy Strategiczni",
+            "separator": false
+          }
+        },
+        "logo_4LPHEz": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/gzm.svg",
+            "alt_text": "",
+            "link": "https://metropoliagzm.pl/"
+          }
+        },
+        "logo_RwMejP": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/slaskie_czarne.svg",
+            "alt_text": "",
+            "link": "https://www.slaskie.pl/"
+          }
+        },
+        "group_header_PUGnTz": {
+          "type": "group_header",
+          "settings": {
+            "title": "Partnerzy",
+            "separator": false
+          }
+        },
+        "logo_MzBUae": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/Zrzut_ekranu_2026-03-2_o_12.10.33.png",
+            "alt_text": "",
+            "link": "https://muzeumslaskie.pl/"
+          }
+        },
+        "logo_DFdr8K": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/nospr.svg",
+            "alt_text": "",
+            "link": "https://nospr.org.pl/pl"
+          }
+        },
+        "logo_piXRTz": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/mck.svg",
+            "alt_text": "",
+            "link": "https://www.mckkatowice.pl/pl/"
+          }
+        },
+        "group_header_egRtJf": {
+          "type": "group_header",
+          "settings": {
+            "title": "Patroni Medialni",
+            "separator": false
+          }
+        },
+        "logo_igkkTe": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/Zrzut_ekranu_2026-03-2_o_12.17.26.png",
+            "alt_text": "",
+            "link": "https://radio357.pl/"
+          }
+        },
+        "logo_pzfW8N": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/tvp_kultura.svg",
+            "alt_text": "",
+            "link": "https://tvpkultura.tvp.pl/"
+          }
+        },
+        "logo_xUhrzR": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/muno.svg",
+            "alt_text": "",
+            "link": "https://muno.pl/"
+          }
+        },
+        "logo_iAFjUL": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/onet.svg",
+            "alt_text": "",
+            "link": "https://www.onet.pl/"
+          }
+        },
+        "logo_TM4N7a": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/kmag.svg",
+            "alt_text": "",
+            "link": "https://sklep.kmag.pl/"
+          }
+        },
+        "logo_rRjU94": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/slazag_c321477b-a576-44c4-b519-a58e2ab246b6.svg",
+            "alt_text": "",
+            "link": "https://www.slazag.pl/"
+          }
+        },
+        "logo_ghNYbM": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/ultramaryna.svg",
+            "alt_text": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "group_header_MHJkVX",
+        "logo_HDc846",
+        "logo_t9QLLb",
+        "group_header_YUcEVX",
+        "logo_bLQAC3",
+        "logo_BNBUce",
+        "group_header_A8iFXf",
+        "logo_8BkeDi",
+        "group_header_8V8eeg",
+        "logo_4LPHEz",
+        "logo_RwMejP",
+        "group_header_PUGnTz",
+        "logo_MzBUae",
+        "logo_DFdr8K",
+        "logo_piXRTz",
+        "group_header_egRtJf",
+        "logo_igkkTe",
+        "logo_pzfW8N",
+        "logo_xUhrzR",
+        "logo_iAFjUL",
+        "logo_TM4N7a",
+        "logo_rRjU94",
+        "logo_ghNYbM"
+      ],
+      "name": "Logo Partners",
+      "settings": {
+        "section_title": "Partnerzy i Sponsorzy",
+        "logo_height": 80,
+        "logo_height_mobile": 50,
+        "logos_gap": 40,
+        "group_gap": 56,
+        "section_title_size": 32,
+        "group_title_size": 14,
+        "group_title_transform": "uppercase",
+        "bg_color": "#ffffff",
+        "section_title_color": "#111111",
+        "group_title_color": "#777777",
+        "separator_color": "#cccccc",
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
+    },
+    "custom_liquid_R3nUbz": {
+      "type": "custom-liquid",
+      "name": "Spotify",
+      "settings": {
+        "custom_liquid": "<div style=\"text-align:center\">\n  <h2>Oficjalna playka Spotify</h2>\n  <p>Posłuchaj jak brzmi TNMK 2026</p>\n  <iframe data-testid=\"embed-iframe\" style=\"border-radius:12px\" src=\"https://open.spotify.com/embed/playlist/4TRHPYpbpOGSbMQLrdfTww?utm_source=generator\" width=\"100%\" height=\"352\" frameBorder=\"0\" allowfullscreen=\"\" allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\"></iframe>\n</div>",
+        "color_scheme": "scheme-c6baaf1d-bce1-4be4-810e-b00c978fcf2f",
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    }
+  },
+  "order": [
+    "slideshow_R7rxyx",
+    "featured_product_7E76Et",
+    "featured_product_mwaKJK",
+    "featured_product_RKLgkt",
+    "custom_liquid_kVdRjT",
+    "logo_partners_7bWn37",
+    "custom_liquid_R3nUbz"
+  ]
+}

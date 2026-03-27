@@ -1,0 +1,810 @@
+{% comment %}
+  Section: Artists Grid
+  Bloki: każdy blok = jeden artysta
+  Filtry: dzień + gatunek (JS, data-atrybuty, zero API)
+{% endcomment %}
+
+<style>
+  #ag-{{ section.id }} {
+    padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
+    background-color: {{ section.settings.bg_color }};
+    --ag-cols: {{ section.settings.columns_desktop }};
+    --ag-gap: {{ section.settings.grid_gap }}px;
+    --ag-radius: {{ section.settings.card_radius }}px;
+    --ag-card-bg: {{ section.settings.card_bg }};
+    --ag-text-color: {{ section.settings.text_color }};
+    --ag-name-color: {{ section.settings.name_color }};
+    --ag-accent: {{ section.settings.accent_color }};
+    --ag-filter-bg: {{ section.settings.filter_bg }};
+    --ag-filter-active: {{ section.settings.accent_color }};
+  }
+
+  #ag-{{ section.id }} .ag-inner {
+    max-width: var(--page-width, 1200px);
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  /* --- Tytuł sekcji --- */
+  #ag-{{ section.id }} .ag-section-title {
+    text-align: center;
+    margin: 0 0 40px;
+    font-size: {{ section.settings.section_title_size }}px;
+    color: var(--ag-name-color);
+  }
+
+  /* --- Filtry --- */
+  #ag-{{ section.id }} .ag-filters {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+
+  #ag-{{ section.id }} .ag-filter-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+
+  #ag-{{ section.id }} .ag-filter-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ag-text-color);
+    opacity: 0.6;
+    min-width: 64px;
+    margin-right: 4px;
+  }
+
+  #ag-{{ section.id }} .ag-filter-btn {
+    padding: 6px 16px;
+    border-radius: 100px;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: transparent;
+    color: var(--ag-text-color);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    white-space: nowrap;
+  }
+
+  #ag-{{ section.id }} .ag-filter-btn:hover {
+    border-color: var(--ag-accent);
+    color: var(--ag-accent);
+  }
+
+  #ag-{{ section.id }} .ag-filter-btn.is-active {
+    background: var(--ag-accent);
+    border-color: var(--ag-accent);
+    color: #000;
+    font-weight: 600;
+  }
+
+  /* --- Licznik wyników --- */
+  #ag-{{ section.id }} .ag-count {
+    font-size: 13px;
+    color: var(--ag-text-color);
+    opacity: 0.5;
+    margin-bottom: 24px;
+    text-align: right;
+  }
+
+  /* --- Grid --- */
+  #ag-{{ section.id }} .ag-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--ag-cols), 1fr);
+    gap: var(--ag-gap);
+  }
+
+  #ag-{{ section.id }} .ag-card {
+    background: var(--ag-card-bg);
+    border-radius: var(--ag-radius);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  #ag-{{ section.id }} .ag-card.ag-hidden {
+    display: none;
+  }
+
+  /* --- Zdjęcie --- */
+  #ag-{{ section.id }} .ag-photo-wrap {
+    position: relative;
+    width: 100%;
+    padding-bottom: {{ section.settings.photo_ratio }}%;
+    overflow: hidden;
+    background: #111;
+    flex-shrink: 0;
+  }
+
+  #ag-{{ section.id }} .ag-photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+
+  #ag-{{ section.id }} .ag-card:hover .ag-photo {
+    transform: scale(1.04);
+  }
+
+  #ag-{{ section.id }} .ag-photo-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #1a1a1a;
+    color: #333;
+    font-size: 56px;
+  }
+
+  /* --- Tagi (dzień / gatunek) --- */
+  #ag-{{ section.id }} .ag-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 16px 20px 0;
+  }
+
+  #ag-{{ section.id }} .ag-tag {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 3px 10px;
+    border-radius: 100px;
+    border: 1px solid rgba(255,255,255,0.15);
+    color: var(--ag-text-color);
+    opacity: 0.7;
+  }
+
+  #ag-{{ section.id }} .ag-tag--day {
+    border-color: var(--ag-accent);
+    color: var(--ag-accent);
+    opacity: 1;
+  }
+
+  /* --- Treść --- */
+  #ag-{{ section.id }} .ag-content {
+    padding: 16px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  #ag-{{ section.id }} .ag-name {
+    margin: 0 0 10px;
+    font-size: {{ section.settings.name_size }}px;
+    color: var(--ag-name-color);
+    line-height: 1.2;
+  }
+
+  #ag-{{ section.id }} .ag-bio {
+    margin: 0 0 16px;
+    font-size: {{ section.settings.bio_size }}px;
+    line-height: 1.6;
+    color: var(--ag-text-color);
+    flex: 1;
+  }
+
+  /* --- Spotify --- */
+  #ag-{{ section.id }} .ag-spotify {
+    margin-top: auto;
+    border-radius: 12px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  #ag-{{ section.id }} .ag-spotify iframe {
+    display: block;
+    width: 100%;
+    border: none;
+  }
+
+  #ag-{{ section.id }} .ag-spotify--compact iframe { height: 80px; }
+  #ag-{{ section.id }} .ag-spotify--full iframe { height: 352px; }
+
+  /* --- Brak wyników --- */
+  #ag-{{ section.id }} .ag-no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--ag-text-color);
+    opacity: 0.4;
+    display: none;
+  }
+
+  /* --- Responsive --- */
+  @media (max-width: 989px) {
+    #ag-{{ section.id }} { --ag-cols: {{ section.settings.columns_tablet }}; }
+  }
+
+  @media (max-width: 749px) {
+    #ag-{{ section.id }} { --ag-cols: 1; }
+
+    #ag-{{ section.id }} .ag-section-title {
+      font-size: {{ section.settings.section_title_size | times: 0.75 | round }}px;
+      margin-bottom: 28px;
+    }
+
+    #ag-{{ section.id }} .ag-filters {
+      gap: 10px;
+    }
+
+    #ag-{{ section.id }} .ag-filter-group {
+      gap: 6px;
+    }
+
+    #ag-{{ section.id }} .ag-filter-btn {
+      font-size: 12px;
+      padding: 5px 12px;
+    }
+  }
+</style>
+
+<section id="ag-{{ section.id }}" class="artists-grid">
+  <div class="ag-inner">
+
+    {% if section.settings.section_title != blank %}
+      <h2 class="ag-section-title">{{ section.settings.section_title }}</h2>
+    {% endif %}
+
+    {%- comment -%} Sprawdź które filtry mają dane {%- endcomment -%}
+    {%- assign has_day = false -%}
+    {%- assign has_genre = false -%}
+    {%- assign has_stage = false -%}
+    {%- for block in section.blocks -%}
+      {%- if block.settings.day != blank -%}{%- assign has_day = true -%}{%- endif -%}
+      {%- if block.settings.stage != blank -%}{%- assign has_stage = true -%}{%- endif -%}
+      {%- if block.settings.genre_techno or block.settings.genre_house or block.settings.genre_electro or block.settings.genre_ambient or block.settings.genre_experimental or block.settings.genre_jazz or block.settings.genre_postrock or block.settings.genre_alternative or block.settings.genre_hiphop or block.settings.genre_classical or block.settings.genre_industrial -%}
+        {%- assign has_genre = true -%}
+      {%- endif -%}
+    {%- endfor -%}
+
+    {%- comment -%} Filtry — widoczne tylko gdy są przypisane dane {%- endcomment -%}
+    {% if has_day or has_genre or has_stage %}
+    <div class="ag-filters" id="ag-filters-{{ section.id }}">
+
+      {%- comment -%} Filtr: dzień {%- endcomment -%}
+      {% if has_day %}
+      <div class="ag-filter-group">
+        <span class="ag-filter-label">Dzień</span>
+        <button class="ag-filter-btn is-active" data-filter="day" data-value="">Wszystkie</button>
+        <button class="ag-filter-btn" data-filter="day" data-value="czwartek">Czwartek</button>
+        <button class="ag-filter-btn" data-filter="day" data-value="piatek">Piątek</button>
+        <button class="ag-filter-btn" data-filter="day" data-value="sobota">Sobota</button>
+        <button class="ag-filter-btn" data-filter="day" data-value="niedziela">Niedziela</button>
+      </div>
+      {% endif %}
+
+      {%- comment -%} Filtr: scena {%- endcomment -%}
+      {% if has_stage %}
+      <div class="ag-filter-group">
+        <span class="ag-filter-label">Scena</span>
+        <button class="ag-filter-btn is-active" data-filter="stage" data-value="">Wszystkie</button>
+        <button class="ag-filter-btn" data-filter="stage" data-value="main">Main Stage</button>
+      </div>
+      {% endif %}
+
+      {%- comment -%} Filtr: gatunek {%- endcomment -%}
+      {% if has_genre %}
+      <div class="ag-filter-group">
+        <span class="ag-filter-label">Gatunek</span>
+        <button class="ag-filter-btn is-active" data-filter="genre" data-value="">Wszystkie</button>
+        <button class="ag-filter-btn" data-filter="genre" data-value="techno">Techno</button>
+        <button class="ag-filter-btn" data-filter="genre" data-value="house">House</button>
+        <button class="ag-filter-btn" data-filter="genre" data-value="electro">Electro</button>
+        <button class="ag-filter-btn" data-filter="genre" data-value="ambient">Ambient / Drone</button>
+        <button class="ag-filter-btn" data-filter="genre" data-value="experimental">Experimental</button>
+        <button class="ag-filter-btn" data-filter="genre" data-value="jazz">Jazz / Nu-jazz</button>
+        <button class="ag-filter-btn" data-filter="genre" data-value="postrock">Post-rock</button>
+        <button class="ag-filter-btn" data-filter="genre" data-value="alternative">Alternative</button>
+        <button class="ag-filter-btn" data-filter="genre" data-value="hiphop">Hip-hop / R&B</button>
+        <button class="ag-filter-btn" data-filter="genre" data-value="classical">Classical / Neo-classical</button>
+        <button class="ag-filter-btn" data-filter="genre" data-value="industrial">Industrial</button>
+      </div>
+      {% endif %}
+
+    </div>
+    {% endif %}
+
+    <div class="ag-count" id="ag-count-{{ section.id }}"></div>
+
+    {% if section.blocks.size > 0 %}
+      <div class="ag-grid" id="ag-grid-{{ section.id }}">
+
+        {% for block in section.blocks %}
+          {% if block.type == 'artist' %}
+
+            {%- comment -%} Spotify embed URL {%- endcomment -%}
+            {% assign spotify_url = block.settings.spotify_url | strip %}
+            {% assign spotify_embed_url = '' %}
+            {% if spotify_url != blank %}
+              {% assign spotify_clean = spotify_url | split: '?' | first %}
+              {% assign spotify_embed_url = spotify_clean | replace: 'open.spotify.com/', 'open.spotify.com/embed/' %}
+              {% unless spotify_embed_url contains 'open.spotify.com/embed/' %}
+                {% assign spotify_embed_url = '' %}
+              {% endunless %}
+            {% endif %}
+
+            {%- assign _g = '' -%}
+            {%- if block.settings.genre_techno -%}{%- assign _g = _g | append: ',techno' -%}{%- endif -%}
+            {%- if block.settings.genre_house -%}{%- assign _g = _g | append: ',house' -%}{%- endif -%}
+            {%- if block.settings.genre_electro -%}{%- assign _g = _g | append: ',electro' -%}{%- endif -%}
+            {%- if block.settings.genre_ambient -%}{%- assign _g = _g | append: ',ambient' -%}{%- endif -%}
+            {%- if block.settings.genre_experimental -%}{%- assign _g = _g | append: ',experimental' -%}{%- endif -%}
+            {%- if block.settings.genre_jazz -%}{%- assign _g = _g | append: ',jazz' -%}{%- endif -%}
+            {%- if block.settings.genre_postrock -%}{%- assign _g = _g | append: ',postrock' -%}{%- endif -%}
+            {%- if block.settings.genre_alternative -%}{%- assign _g = _g | append: ',alternative' -%}{%- endif -%}
+            {%- if block.settings.genre_hiphop -%}{%- assign _g = _g | append: ',hiphop' -%}{%- endif -%}
+            {%- if block.settings.genre_classical -%}{%- assign _g = _g | append: ',classical' -%}{%- endif -%}
+            {%- if block.settings.genre_industrial -%}{%- assign _g = _g | append: ',industrial' -%}{%- endif -%}
+            {%- assign _genre_data = _g | slice: 1, 9999 -%}
+
+            <div class="ag-card"
+              data-day="{{ block.settings.day }}"
+              data-genre="{{ _genre_data }}"
+              data-stage="{{ block.settings.stage }}"
+              {{ block.shopify_attributes }}
+            >
+
+              {%- comment -%} Zdjęcie {%- endcomment -%}
+              <div class="ag-photo-wrap">
+                {% if block.settings.image != blank %}
+                  {{ block.settings.image | image_url: width: 800 | image_tag:
+                    loading: 'lazy',
+                    class: 'ag-photo',
+                    alt: block.settings.name
+                  }}
+                {% else %}
+                  <div class="ag-photo-placeholder">♪</div>
+                {% endif %}
+              </div>
+
+              {%- comment -%} Tagi {%- endcomment -%}
+              {% if block.settings.day != blank or block.settings.stage != blank or _genre_data != blank %}
+                <div class="ag-tags">
+                  {% if block.settings.day != blank %}
+                    {% case block.settings.day %}
+                      {% when 'czwartek' %}{% assign day_label = 'Czwartek' %}
+                      {% when 'piatek' %}{% assign day_label = 'Piątek' %}
+                      {% when 'sobota' %}{% assign day_label = 'Sobota' %}
+                      {% when 'niedziela' %}{% assign day_label = 'Niedziela' %}
+                    {% endcase %}
+                    <span class="ag-tag ag-tag--day">{{ day_label }}</span>
+                  {% endif %}
+                  {% if block.settings.stage != blank %}
+                    {% case block.settings.stage %}
+                      {% when 'main' %}{% assign stage_label = 'Main Stage' %}
+                    {% endcase %}
+                    <span class="ag-tag">{{ stage_label }}</span>
+                  {% endif %}
+                  {% if block.settings.genre_techno %}<span class="ag-tag">Techno</span>{% endif %}
+                  {% if block.settings.genre_house %}<span class="ag-tag">House</span>{% endif %}
+                  {% if block.settings.genre_electro %}<span class="ag-tag">Electro</span>{% endif %}
+                  {% if block.settings.genre_ambient %}<span class="ag-tag">Ambient / Drone</span>{% endif %}
+                  {% if block.settings.genre_experimental %}<span class="ag-tag">Experimental</span>{% endif %}
+                  {% if block.settings.genre_jazz %}<span class="ag-tag">Jazz / Nu-jazz</span>{% endif %}
+                  {% if block.settings.genre_postrock %}<span class="ag-tag">Post-rock</span>{% endif %}
+                  {% if block.settings.genre_alternative %}<span class="ag-tag">Alternative</span>{% endif %}
+                  {% if block.settings.genre_hiphop %}<span class="ag-tag">Hip-hop / R&B</span>{% endif %}
+                  {% if block.settings.genre_classical %}<span class="ag-tag">Classical / Neo-classical</span>{% endif %}
+                  {% if block.settings.genre_industrial %}<span class="ag-tag">Industrial</span>{% endif %}
+                </div>
+              {% endif %}
+
+              {%- comment -%} Treść {%- endcomment -%}
+              <div class="ag-content">
+                {% if block.settings.name != blank %}
+                  <h3 class="ag-name">{{ block.settings.name }}</h3>
+                {% endif %}
+
+                {% if block.settings.bio != blank %}
+                  <div class="ag-bio">{{ block.settings.bio }}</div>
+                {% endif %}
+
+                {% if spotify_embed_url != blank %}
+                  <div class="ag-spotify ag-spotify--{{ section.settings.spotify_player_style }}">
+                    <iframe
+                      src="{{ spotify_embed_url }}?utm_source=generator&theme={{ section.settings.spotify_theme }}"
+                      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                      loading="lazy"
+                      title="{{ block.settings.name | escape }} on Spotify"
+                    ></iframe>
+                  </div>
+                {% endif %}
+              </div>
+
+            </div>
+
+          {% endif %}
+        {% endfor %}
+
+        <div class="ag-no-results" id="ag-no-results-{{ section.id }}">
+          Brak artystów dla wybranych filtrów.
+        </div>
+
+      </div>
+    {% else %}
+      <p style="text-align:center;padding:40px;opacity:0.4;">Dodaj artystów w edytorze motywu.</p>
+    {% endif %}
+
+  </div>
+</section>
+
+<script>
+(function() {
+  var sectionId = {{ section.id | json }};
+  var grid      = document.getElementById('ag-grid-' + sectionId);
+  var countEl   = document.getElementById('ag-count-' + sectionId);
+  var noResults = document.getElementById('ag-no-results-' + sectionId);
+  var filters   = { day: '', stage: '', genre: [] };
+
+  if (!grid) return;
+
+  var allCards = Array.from(grid.querySelectorAll('.ag-card'));
+
+  function updateCount(visible) {
+    if (!countEl) return;
+    var total = allCards.length;
+    if (visible === total) {
+      countEl.textContent = '';
+    } else {
+      countEl.textContent = visible + ' z ' + total + ' artystów';
+    }
+  }
+
+  function applyFilters() {
+    var visible = 0;
+    allCards.forEach(function(card) {
+      var dayOk   = !filters.day   || card.dataset.day   === filters.day;
+      var stageOk = !filters.stage || card.dataset.stage === filters.stage;
+      var cardGenres = card.dataset.genre ? card.dataset.genre.split(',').filter(Boolean) : [];
+      var genreOk = !filters.genre.length || filters.genre.some(function(g) { return cardGenres.indexOf(g) !== -1; });
+      if (dayOk && stageOk && genreOk) {
+        card.classList.remove('ag-hidden');
+        visible++;
+      } else {
+        card.classList.add('ag-hidden');
+      }
+    });
+    if (noResults) noResults.style.display = visible === 0 ? 'block' : 'none';
+    updateCount(visible);
+  }
+
+  var filtersEl = document.getElementById('ag-filters-' + sectionId);
+  if (!filtersEl) return;
+
+  filtersEl.addEventListener('click', function(e) {
+    var btn = e.target.closest('.ag-filter-btn');
+    if (!btn) return;
+
+    var filterKey = btn.dataset.filter;
+    var filterVal = btn.dataset.value;
+    var group = btn.closest('.ag-filter-group');
+
+    if (filterKey === 'day' || filterKey === 'stage') {
+      // Dzień / Scena: single-select
+      if (filters[filterKey] === filterVal) return;
+      filters[filterKey] = filterVal;
+      group.querySelectorAll('.ag-filter-btn').forEach(function(b) {
+        b.classList.toggle('is-active', b === btn);
+      });
+
+    } else if (filterKey === 'genre') {
+      // Gatunek: multi-select
+      if (filterVal === '') {
+        // "Wszystkie" — czyści wszystko
+        filters.genre = [];
+        group.querySelectorAll('.ag-filter-btn').forEach(function(b) {
+          b.classList.toggle('is-active', b.dataset.value === '');
+        });
+      } else {
+        // toggle wybranego gatunku
+        var idx = filters.genre.indexOf(filterVal);
+        if (idx === -1) {
+          filters.genre.push(filterVal);
+        } else {
+          filters.genre.splice(idx, 1);
+        }
+        // "Wszystkie" aktywne tylko gdy nic nie wybrano
+        group.querySelectorAll('.ag-filter-btn').forEach(function(b) {
+          if (b.dataset.value === '') {
+            b.classList.toggle('is-active', filters.genre.length === 0);
+          } else {
+            b.classList.toggle('is-active', filters.genre.indexOf(b.dataset.value) !== -1);
+          }
+        });
+      }
+    }
+
+    applyFilters();
+  });
+
+  // inicjalne zliczenie
+  updateCount(allCards.length);
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Artists Grid",
+  "tag": "section",
+  "class": "section-artists-grid",
+  "max_blocks": 50,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Sekcja"
+    },
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Tytuł sekcji",
+      "default": "Artyści"
+    },
+    {
+      "type": "range",
+      "id": "section_title_size",
+      "min": 20,
+      "max": 72,
+      "step": 2,
+      "unit": "px",
+      "label": "Rozmiar tytułu sekcji",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Siatka"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "label": "Kolumny (desktop)",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "columns_tablet",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "label": "Kolumny (tablet)",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "min": 8,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Odstęp między kartami",
+      "default": 32
+    },
+    {
+      "type": "header",
+      "content": "Karty"
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "label": "Zaokrąglenie rogów",
+      "default": 12
+    },
+    {
+      "type": "select",
+      "id": "photo_ratio",
+      "label": "Proporcje zdjęcia",
+      "options": [
+        { "value": "75", "label": "4:3 (poziome)" },
+        { "value": "100", "label": "1:1 (kwadrat)" },
+        { "value": "125", "label": "4:5 (pionowe)" },
+        { "value": "56.25", "label": "16:9 (szerokie)" }
+      ],
+      "default": "100"
+    },
+    {
+      "type": "header",
+      "content": "Typografia"
+    },
+    {
+      "type": "range",
+      "id": "name_size",
+      "min": 14,
+      "max": 48,
+      "step": 1,
+      "unit": "px",
+      "label": "Rozmiar nazwy artysty",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "bio_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Rozmiar bio",
+      "default": 15
+    },
+    {
+      "type": "header",
+      "content": "Spotify"
+    },
+    {
+      "type": "select",
+      "id": "spotify_player_style",
+      "label": "Styl playera",
+      "options": [
+        { "value": "compact", "label": "Kompaktowy (pasek 80px)" },
+        { "value": "full", "label": "Pełny (okładka + lista)" }
+      ],
+      "default": "compact"
+    },
+    {
+      "type": "select",
+      "id": "spotify_theme",
+      "label": "Motyw Spotify",
+      "options": [
+        { "value": "0", "label": "Ciemny" },
+        { "value": "1", "label": "Jasny" }
+      ],
+      "default": "0"
+    },
+    {
+      "type": "header",
+      "content": "Kolory"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Tło sekcji",
+      "default": "#0a0a0a"
+    },
+    {
+      "type": "color",
+      "id": "card_bg",
+      "label": "Tło karty",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "name_color",
+      "label": "Kolor nazwy artysty",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Kolor bio i tagów",
+      "default": "#bbbbbb"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Kolor akcentu (aktywny filtr, dzień)",
+      "default": "#1db954"
+    },
+    {
+      "type": "color",
+      "id": "filter_bg",
+      "label": "Tło filtrów",
+      "default": "#0a0a0a"
+    },
+    {
+      "type": "header",
+      "content": "Odstępy"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding góra",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding dół",
+      "default": 80
+    }
+  ],
+  "blocks": [
+    {
+      "type": "artist",
+      "name": "Artysta",
+      "settings": [
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Nazwa artysty / zespołu",
+          "default": "Nazwa Artysty"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Zdjęcie"
+        },
+        {
+          "type": "textarea",
+          "id": "bio",
+          "label": "Krótkie bio"
+        },
+        {
+          "type": "select",
+          "id": "day",
+          "label": "Dzień",
+          "options": [
+            { "value": "", "label": "— nie przypisano —" },
+            { "value": "czwartek", "label": "Czwartek" },
+            { "value": "piatek", "label": "Piątek" },
+            { "value": "sobota", "label": "Sobota" },
+            { "value": "niedziela", "label": "Niedziela" }
+          ],
+          "default": ""
+        },
+        {
+          "type": "select",
+          "id": "stage",
+          "label": "Scena",
+          "options": [
+            { "value": "", "label": "— nie przypisano —" },
+            { "value": "main", "label": "Main Stage" }
+          ],
+          "default": ""
+        },
+        { "type": "header", "content": "Gatunek (można zaznaczyć kilka)" },
+        { "type": "checkbox", "id": "genre_techno", "label": "Techno", "default": false },
+        { "type": "checkbox", "id": "genre_house", "label": "House", "default": false },
+        { "type": "checkbox", "id": "genre_electro", "label": "Electro", "default": false },
+        { "type": "checkbox", "id": "genre_ambient", "label": "Ambient / Drone", "default": false },
+        { "type": "checkbox", "id": "genre_experimental", "label": "Experimental", "default": false },
+        { "type": "checkbox", "id": "genre_jazz", "label": "Jazz / Nu-jazz", "default": false },
+        { "type": "checkbox", "id": "genre_postrock", "label": "Post-rock", "default": false },
+        { "type": "checkbox", "id": "genre_alternative", "label": "Alternative", "default": false },
+        { "type": "checkbox", "id": "genre_hiphop", "label": "Hip-hop / R&B", "default": false },
+        { "type": "checkbox", "id": "genre_classical", "label": "Classical / Neo-classical", "default": false },
+        { "type": "checkbox", "id": "genre_industrial", "label": "Industrial", "default": false },
+        {
+          "type": "url",
+          "id": "spotify_url",
+          "label": "Spotify URL",
+          "info": "Wklej link artysty / albumu / playlisty ze Spotify"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Artists Grid",
+      "blocks": [
+        { "type": "artist", "settings": { "name": "Artysta 1" } },
+        { "type": "artist", "settings": { "name": "Artysta 2" } },
+        { "type": "artist", "settings": { "name": "Artysta 3" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

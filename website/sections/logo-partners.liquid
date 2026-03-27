@@ -1,0 +1,399 @@
+{% comment %}
+  Section: Logo Partners / Sponsors
+  Bloki: group_header (nagłówek grupy) + logo (logotyp)
+  Kolejność: dodaj "Group / Category", pod nim dodawaj "Logo" bloki
+{% endcomment %}
+
+<style>
+  #lp-{{ section.id }} {
+    padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
+    background-color: {{ section.settings.bg_color }};
+    --lp-logo-h: {{ section.settings.logo_height }}px;
+    --lp-logo-h-mobile: {{ section.settings.logo_height_mobile }}px;
+    --lp-gap: {{ section.settings.logos_gap }}px;
+    --lp-group-gap: {{ section.settings.group_gap }}px;
+  }
+
+  #lp-{{ section.id }} .lp-inner {
+    max-width: var(--page-width, 1200px);
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  #lp-{{ section.id }} .lp-section-title {
+    text-align: center;
+    margin: 0 0 48px;
+    font-size: {{ section.settings.section_title_size }}px;
+    color: {{ section.settings.section_title_color }};
+  }
+
+  #lp-{{ section.id }} .lp-group {
+    margin-bottom: var(--lp-group-gap);
+  }
+
+  #lp-{{ section.id }} .lp-group:last-child {
+    margin-bottom: 0;
+  }
+
+  #lp-{{ section.id }} .lp-group-title {
+    text-align: center;
+    margin: 0 0 20px;
+    font-size: {{ section.settings.group_title_size }}px;
+    color: {{ section.settings.group_title_color }};
+    text-transform: {{ section.settings.group_title_transform }};
+    letter-spacing: 0.08em;
+  }
+
+  #lp-{{ section.id }} .lp-logos {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--lp-gap);
+  }
+
+  #lp-{{ section.id }} .lp-logo-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  #lp-{{ section.id }} .lp-logo-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s ease;
+  }
+
+  #lp-{{ section.id }} .lp-logo-link:hover {
+    opacity: 0.7;
+  }
+
+  #lp-{{ section.id }} .lp-logo-img {
+    height: var(--lp-logo-h);
+    width: auto;
+    max-width: 240px;
+    object-fit: contain;
+    display: block;
+  }
+
+  #lp-{{ section.id }} .lp-separator {
+    border: none;
+    border-top: 1px solid {{ section.settings.separator_color }};
+    margin: var(--lp-group-gap) 0;
+    opacity: 0.3;
+  }
+
+  #lp-{{ section.id }} .lp-empty {
+    text-align: center;
+    padding: 40px;
+    color: #888;
+    font-style: italic;
+  }
+
+  @media (max-width: 749px) {
+    #lp-{{ section.id }} {
+      --lp-logo-h: var(--lp-logo-h-mobile);
+    }
+
+    #lp-{{ section.id }} .lp-section-title {
+      font-size: {{ section.settings.section_title_size | times: 0.75 | round }}px;
+      margin-bottom: 32px;
+    }
+
+    #lp-{{ section.id }} .lp-group-title {
+      font-size: {{ section.settings.group_title_size | times: 0.85 | round }}px;
+    }
+  }
+</style>
+
+<section id="lp-{{ section.id }}" class="logo-partners">
+  <div class="lp-inner">
+
+    {% if section.settings.section_title != blank %}
+      <h2 class="lp-section-title">{{ section.settings.section_title }}</h2>
+    {% endif %}
+
+    {% assign in_group = false %}
+    {% assign show_separator = false %}
+
+    {% for block in section.blocks %}
+
+      {% if block.type == 'group_header' %}
+
+        {% if in_group %}
+          </div>{% comment %}.lp-logos{% endcomment %}
+          </div>{% comment %}.lp-group{% endcomment %}
+        {% endif %}
+
+        {% if show_separator and in_group %}
+          <hr class="lp-separator">
+        {% endif %}
+
+        {% assign in_group = true %}
+        {% assign show_separator = block.settings.separator %}
+
+        <div class="lp-group" {{ block.shopify_attributes }}>
+          {% if block.settings.title != blank %}
+            <h3 class="lp-group-title">{{ block.settings.title }}</h3>
+          {% endif %}
+          <div class="lp-logos">
+
+      {% elsif block.type == 'logo' %}
+
+        {% unless in_group %}
+          {% assign in_group = true %}
+          <div class="lp-group">
+            <div class="lp-logos">
+        {% endunless %}
+
+        {% if block.settings.image != blank %}
+          <div class="lp-logo-wrap" {{ block.shopify_attributes }}>
+            {% if block.settings.link != blank %}
+              <a href="{{ block.settings.link }}" class="lp-logo-link" target="_blank" rel="noopener noreferrer" aria-label="{{ block.settings.alt_text | default: 'Logo' }}">
+            {% endif %}
+
+            {{ block.settings.image | image_url: width: 600 | image_tag:
+              loading: 'lazy',
+              class: 'lp-logo-img',
+              alt: block.settings.alt_text
+            }}
+
+            {% if block.settings.link != blank %}
+              </a>
+            {% endif %}
+          </div>
+        {% endif %}
+
+      {% endif %}
+
+    {% endfor %}
+
+    {% if in_group %}
+      </div>{% comment %}.lp-logos{% endcomment %}
+      </div>{% comment %}.lp-group{% endcomment %}
+    {% endif %}
+
+    {% if section.blocks.size == 0 %}
+      <p class="lp-empty">Dodaj grupy i logotypy w edytorze motywu.</p>
+    {% endif %}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Logo Partners",
+  "tag": "section",
+  "class": "section-logo-partners",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Treść sekcji"
+    },
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Tytuł sekcji (opcjonalny)",
+      "default": "Partnerzy i Sponsorzy"
+    },
+    {
+      "type": "header",
+      "content": "Logotypy"
+    },
+    {
+      "type": "range",
+      "id": "logo_height",
+      "min": 30,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Wysokość logo (desktop)",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "logo_height_mobile",
+      "min": 20,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "label": "Wysokość logo (mobile)",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "logos_gap",
+      "min": 8,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Odstęp między logo",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "group_gap",
+      "min": 20,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Odstęp między grupami",
+      "default": 56
+    },
+    {
+      "type": "header",
+      "content": "Typografia"
+    },
+    {
+      "type": "range",
+      "id": "section_title_size",
+      "min": 16,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Rozmiar tytułu sekcji",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "group_title_size",
+      "min": 12,
+      "max": 36,
+      "step": 1,
+      "unit": "px",
+      "label": "Rozmiar nazwy grupy",
+      "default": 14
+    },
+    {
+      "type": "select",
+      "id": "group_title_transform",
+      "label": "Styl nazwy grupy",
+      "options": [
+        { "value": "uppercase", "label": "WIELKIE LITERY" },
+        { "value": "capitalize", "label": "Pierwsze Wielkie" },
+        { "value": "none", "label": "Normalny" }
+      ],
+      "default": "uppercase"
+    },
+    {
+      "type": "header",
+      "content": "Kolory"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Tło sekcji",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "section_title_color",
+      "label": "Kolor tytułu sekcji",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "group_title_color",
+      "label": "Kolor nazwy grupy",
+      "default": "#777777"
+    },
+    {
+      "type": "color",
+      "id": "separator_color",
+      "label": "Kolor separatora",
+      "default": "#cccccc"
+    },
+    {
+      "type": "header",
+      "content": "Odstępy"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding góra",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding dół",
+      "default": 64
+    }
+  ],
+  "blocks": [
+    {
+      "type": "group_header",
+      "name": "Grupa (nagłówek)",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Nazwa grupy",
+          "default": "Sponsorzy"
+        },
+        {
+          "type": "checkbox",
+          "id": "separator",
+          "label": "Separator nad grupą",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "logo",
+      "name": "Logo",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Logotyp"
+        },
+        {
+          "type": "text",
+          "id": "alt_text",
+          "label": "Tekst alternatywny (dostępność)"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link (opcjonalny)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Logo Partners",
+      "blocks": [
+        {
+          "type": "group_header",
+          "settings": { "title": "Patroni" }
+        },
+        { "type": "logo" },
+        { "type": "logo" },
+        {
+          "type": "group_header",
+          "settings": { "title": "Sponsorzy" }
+        },
+        { "type": "logo" },
+        { "type": "logo" },
+        {
+          "type": "group_header",
+          "settings": { "title": "Partnerzy medialni" }
+        },
+        { "type": "logo" }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,597 @@
+{% comment %}
+  Section: Volunteer — strona naboru wolontariuszy TNMK 2026
+  Cel: konwersja — CTA na formularz Google Forms
+{% endcomment %}
+
+<style>
+  #vol-{{ section.id }} {
+    --vol-bg: {{ section.settings.bg_color }};
+    --vol-text: {{ section.settings.text_color }};
+    --vol-accent: {{ section.settings.accent_color }};
+    --vol-card-bg: {{ section.settings.card_bg }};
+    background: var(--vol-bg);
+    color: var(--vol-text);
+    overflow-x: hidden;
+  }
+
+  #vol-{{ section.id }} * { box-sizing: border-box; }
+
+  #vol-{{ section.id }} .vol-inner {
+    max-width: var(--page-width, 1200px);
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  /* ── HERO ── */
+  #vol-{{ section.id }} .vol-hero {
+    padding: 80px 20px 50px;
+    text-align: center;
+  }
+
+  #vol-{{ section.id }} .vol-badge {
+    display: inline-block;
+    background: var(--vol-accent);
+    color: #000;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    padding: 6px 20px;
+    border-radius: 30px;
+    margin-bottom: 24px;
+  }
+
+  #vol-{{ section.id }} .vol-hero h1 {
+    font-size: clamp(32px, 6vw, 56px);
+    line-height: 1.1;
+    margin: 0 0 16px;
+    text-transform: uppercase;
+  }
+
+  #vol-{{ section.id }} .vol-hero h1 em {
+    font-style: normal;
+    color: var(--vol-accent);
+  }
+
+  #vol-{{ section.id }} .vol-hero-sub {
+    font-size: clamp(15px, 2vw, 18px);
+    opacity: 0.75;
+    max-width: 600px;
+    margin: 0 auto 32px;
+    line-height: 1.5;
+  }
+
+  /* ── CTA BUTTON ── */
+  #vol-{{ section.id }} .vol-cta {
+    display: inline-block;
+    background: var(--vol-accent);
+    color: #000;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 16px 40px;
+    border-radius: 50px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  #vol-{{ section.id }} .vol-cta:hover {
+    opacity: 0.85;
+  }
+
+  /* ── URGENCY ── */
+  #vol-{{ section.id }} .vol-urgency {
+    text-align: center;
+    padding: 24px 20px;
+  }
+
+  #vol-{{ section.id }} .vol-urgency p {
+    font-size: 13px;
+    opacity: 0.7;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 0;
+  }
+
+  #vol-{{ section.id }} .vol-urgency strong {
+    color: var(--vol-accent);
+    opacity: 1;
+  }
+
+  /* ── DATE STRIP ── */
+  #vol-{{ section.id }} .vol-dates {
+    display: flex;
+    justify-content: center;
+    gap: 2px;
+    margin: 32px auto;
+    max-width: 500px;
+  }
+
+  #vol-{{ section.id }} .vol-date-item {
+    flex: 1;
+    background: var(--vol-card-bg);
+    padding: 16px 8px;
+    text-align: center;
+  }
+
+  #vol-{{ section.id }} .vol-date-item:first-child { border-radius: 8px 0 0 8px; }
+  #vol-{{ section.id }} .vol-date-item:last-child { border-radius: 0 8px 8px 0; }
+
+  #vol-{{ section.id }} .vol-date-item .day {
+    font-size: 24px;
+    line-height: 1;
+  }
+
+  #vol-{{ section.id }} .vol-date-item .label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.6;
+    margin-top: 4px;
+  }
+
+  /* ── SECTION HEADING (reusable) ── */
+  #vol-{{ section.id }} .vol-section-title {
+    text-align: center;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    color: var(--vol-accent);
+    margin: 0 0 32px;
+  }
+
+  /* ── BENEFITS GRID ── */
+  #vol-{{ section.id }} .vol-benefits {
+    padding: 48px 20px;
+  }
+
+  #vol-{{ section.id }} .vol-benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    max-width: var(--page-width, 1200px);
+    margin: 0 auto;
+  }
+
+  #vol-{{ section.id }} .vol-benefit {
+    background: var(--vol-card-bg);
+    border-radius: 12px;
+    padding: 24px 20px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+
+  #vol-{{ section.id }} .vol-benefit-icon {
+    font-size: 24px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  #vol-{{ section.id }} .vol-benefit-text h3 {
+    font-size: 15px;
+    margin: 0 0 4px;
+  }
+
+  #vol-{{ section.id }} .vol-benefit-text p {
+    font-size: 13px;
+    opacity: 0.7;
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  /* ── TASKS ── */
+  #vol-{{ section.id }} .vol-tasks {
+    padding: 32px 20px 48px;
+    text-align: center;
+  }
+
+  #vol-{{ section.id }} .vol-tasks-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  #vol-{{ section.id }} .vol-task-tag {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 30px;
+    padding: 8px 20px;
+    font-size: 13px;
+    opacity: 0.85;
+    white-space: nowrap;
+  }
+
+  /* ── MID CTA ── */
+  #vol-{{ section.id }} .vol-mid-cta {
+    text-align: center;
+    padding: 48px 20px;
+  }
+
+  #vol-{{ section.id }} .vol-mid-cta h2 {
+    font-size: clamp(22px, 4vw, 36px);
+    margin: 0 0 10px;
+    text-transform: uppercase;
+  }
+
+  #vol-{{ section.id }} .vol-mid-cta p {
+    opacity: 0.7;
+    margin: 0 0 24px;
+    font-size: 15px;
+  }
+
+  /* ── TIMELINE ── */
+  #vol-{{ section.id }} .vol-timeline {
+    padding: 32px 20px 48px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  #vol-{{ section.id }} .vol-step {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    margin-bottom: 20px;
+  }
+
+  #vol-{{ section.id }} .vol-step-num {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--vol-accent);
+    color: #000;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  #vol-{{ section.id }} .vol-step-body h3 {
+    font-size: 15px;
+    margin: 0;
+    line-height: 36px;
+  }
+
+  #vol-{{ section.id }} .vol-step-body p {
+    font-size: 13px;
+    opacity: 0.65;
+    margin: 2px 0 0;
+  }
+
+  /* ── FORM SECTION ── */
+  #vol-{{ section.id }} .vol-form-section {
+    padding: 48px 20px 60px;
+    text-align: center;
+  }
+
+  #vol-{{ section.id }} .vol-form-section h2 {
+    font-size: clamp(22px, 4vw, 32px);
+    margin: 0 0 8px;
+    text-transform: uppercase;
+  }
+
+  #vol-{{ section.id }} .vol-form-section > p {
+    opacity: 0.7;
+    margin: 0 0 24px;
+    font-size: 14px;
+  }
+
+  #vol-{{ section.id }} .vol-form-wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  #vol-{{ section.id }} .vol-form-wrap iframe {
+    width: 100%;
+    border: none;
+    display: block;
+  }
+
+  /* ── CONTACT ── */
+  #vol-{{ section.id }} .vol-contact {
+    text-align: center;
+    padding: 0 20px 60px;
+  }
+
+  #vol-{{ section.id }} .vol-contact p {
+    opacity: 0.65;
+    font-size: 14px;
+    margin: 0;
+  }
+
+  #vol-{{ section.id }} .vol-contact a {
+    color: var(--vol-accent);
+    text-decoration: none;
+  }
+
+  #vol-{{ section.id }} .vol-contact a:hover {
+    text-decoration: underline;
+  }
+
+  /* ── MOBILE ── */
+  @media (max-width: 749px) {
+    #vol-{{ section.id }} .vol-hero { padding: 60px 16px 36px; }
+    #vol-{{ section.id }} .vol-cta { padding: 14px 32px; font-size: 13px; }
+    #vol-{{ section.id }} .vol-benefits-grid { grid-template-columns: 1fr; }
+    #vol-{{ section.id }} .vol-form-wrap { border-radius: 8px; }
+  }
+</style>
+
+<div id="vol-{{ section.id }}">
+
+  {%- comment -%} ████ HERO ████ {%- endcomment -%}
+  <div class="vol-hero">
+    <div class="vol-badge">{{ section.settings.badge_text }}</div>
+    <h1>{{ section.settings.hero_title_1 }}<br><em>{{ section.settings.hero_title_2 }}</em></h1>
+    <p class="vol-hero-sub">{{ section.settings.hero_subtitle }}</p>
+    <a href="#vol-form-{{ section.id }}" class="vol-cta">{{ section.settings.cta_text }}</a>
+  </div>
+
+  {%- comment -%} ████ URGENCY ████ {%- endcomment -%}
+  <div class="vol-urgency">
+    <p>Nabór trwa do <strong>{{ section.settings.deadline }}</strong> — nie czekaj na ostatni dzień</p>
+  </div>
+
+  {%- comment -%} ████ DATES ████ {%- endcomment -%}
+  <div class="vol-inner">
+    <div class="vol-dates">
+      <div class="vol-date-item">
+        <div class="day">4</div>
+        <div class="label">CZW / NOSPR</div>
+      </div>
+      <div class="vol-date-item">
+        <div class="day">5</div>
+        <div class="label">PT / Strefa</div>
+      </div>
+      <div class="vol-date-item">
+        <div class="day">6</div>
+        <div class="label">SOB / Strefa</div>
+      </div>
+      <div class="vol-date-item">
+        <div class="day">7</div>
+        <div class="label">ND / Fajrant</div>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} ████ BENEFITS ████ {%- endcomment -%}
+  <div class="vol-benefits">
+    <h2 class="vol-section-title">Co dostajesz</h2>
+    <div class="vol-benefits-grid">
+      <div class="vol-benefit">
+        <div class="vol-benefit-icon">🎫</div>
+        <div class="vol-benefit-text">
+          <h3>Wejście na festiwal</h3>
+          <p>Pełny dostęp — sceny, backstage, cała magia</p>
+        </div>
+      </div>
+      <div class="vol-benefit">
+        <div class="vol-benefit-icon">🍕</div>
+        <div class="vol-benefit-text">
+          <h3>Wyżywienie</h3>
+          <p>Jedzenie i picie przez cały czas pracy</p>
+        </div>
+      </div>
+      <div class="vol-benefit">
+        <div class="vol-benefit-icon">👕</div>
+        <div class="vol-benefit-text">
+          <h3>Koszulka festiwalowa</h3>
+          <p>Oficjalny merch — nie do kupienia</p>
+        </div>
+      </div>
+      <div class="vol-benefit">
+        <div class="vol-benefit-icon">📄</div>
+        <div class="vol-benefit-text">
+          <h3>Umowa + ubezpieczenie</h3>
+          <p>Wszystko oficjalnie i legalnie</p>
+        </div>
+      </div>
+      <div class="vol-benefit">
+        <div class="vol-benefit-icon">📝</div>
+        <div class="vol-benefit-text">
+          <h3>Referencje</h3>
+          <p>Zaświadczenie do CV i portfolio</p>
+        </div>
+      </div>
+      <div class="vol-benefit">
+        <div class="vol-benefit-icon">💃</div>
+        <div class="vol-benefit-text">
+          <h3>Taniec do rana</h3>
+          <p>Bo po pracy jest impreza</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} ████ TASKS ████ {%- endcomment -%}
+  <div class="vol-tasks">
+    <h2 class="vol-section-title">Czym będziesz się zajmować</h2>
+    <div class="vol-tasks-list">
+      <span class="vol-task-tag">Punkt informacyjny</span>
+      <span class="vol-task-tag">Akredytacja</span>
+      <span class="vol-task-tag">Obsługa wejść</span>
+      <span class="vol-task-tag">Backstage</span>
+      <span class="vol-task-tag">Garderoby</span>
+      <span class="vol-task-tag">Strefa gastro</span>
+      <span class="vol-task-tag">Media</span>
+      <span class="vol-task-tag">...i inne, które wymyślimy razem</span>
+    </div>
+  </div>
+
+  {%- comment -%} ████ MID CTA ████ {%- endcomment -%}
+  <div class="vol-mid-cta">
+    <h2>Chcesz to przeżyć?</h2>
+    <p>Zostaw swoje zgłoszenie — 2 minuty i gotowe</p>
+    <a href="#vol-form-{{ section.id }}" class="vol-cta">Zgłoś się teraz</a>
+  </div>
+
+  {%- comment -%} ████ TIMELINE ████ {%- endcomment -%}
+  <div class="vol-timeline">
+    <h2 class="vol-section-title">Jak to działa</h2>
+    <div class="vol-step">
+      <div class="vol-step-num">1</div>
+      <div class="vol-step-body">
+        <h3>Wypełnij formularz poniżej</h3>
+        <p>Zajmie Ci max 2 minuty</p>
+      </div>
+    </div>
+    <div class="vol-step">
+      <div class="vol-step-num">2</div>
+      <div class="vol-step-body">
+        <h3>Czekaj na nasz kontakt</h3>
+        <p>Odezwiemy się do 10 maja 2026</p>
+      </div>
+    </div>
+    <div class="vol-step">
+      <div class="vol-step-num">3</div>
+      <div class="vol-step-body">
+        <h3>Dołącz do ekipy</h3>
+        <p>Zaproszenie mailem do 15 maja 2026</p>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} ████ FORM ████ {%- endcomment -%}
+  <div class="vol-form-section" id="vol-form-{{ section.id }}">
+    <h2>Formularz zgłoszeniowy</h2>
+    <p>Podaj swoją dyspozycyjność — brak info = dostępność przez cały festiwal</p>
+    <div class="vol-form-wrap">
+      <iframe
+        src="{{ section.settings.form_url }}"
+        height="{{ section.settings.form_height }}"
+        loading="lazy"
+        title="Formularz wolontariatu TNMK 2026"
+      >Ładowanie formularza…</iframe>
+    </div>
+  </div>
+
+  {%- comment -%} ████ CONTACT ████ {%- endcomment -%}
+  <div class="vol-contact">
+    <p>Masz pytania? Napisz: <a href="mailto:{{ section.settings.email }}">{{ section.settings.email }}</a></p>
+  </div>
+
+</div>
+
+{% schema %}
+{
+  "name": "Wolontariat",
+  "tag": "section",
+  "class": "section-volunteer",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Hero"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge (nad tytułem)",
+      "default": "Nabór otwarty"
+    },
+    {
+      "type": "text",
+      "id": "hero_title_1",
+      "label": "Tytuł linia 1",
+      "default": "Współtwórz festiwal"
+    },
+    {
+      "type": "text",
+      "id": "hero_title_2",
+      "label": "Tytuł linia 2 (accent)",
+      "default": "od środka"
+    },
+    {
+      "type": "textarea",
+      "id": "hero_subtitle",
+      "label": "Podtytuł",
+      "default": "Tauron Nowa Muzyka Katowice 2026 szuka wolontariuszy. 4 dni festiwalu, backstage, muzyka i ludzie — wejdź do ekipy."
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Tekst CTA",
+      "default": "Zgłoś się →"
+    },
+    {
+      "type": "text",
+      "id": "deadline",
+      "label": "Deadline naboru",
+      "default": "10 maja 2026"
+    },
+    {
+      "type": "header",
+      "content": "Formularz"
+    },
+    {
+      "type": "url",
+      "id": "form_url",
+      "label": "URL formularza (embed)"
+    },
+    {
+      "type": "range",
+      "id": "form_height",
+      "label": "Wysokość formularza (px)",
+      "min": 500,
+      "max": 3000,
+      "step": 50,
+      "default": 1400
+    },
+    {
+      "type": "header",
+      "content": "Kontakt"
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "Email kontaktowy",
+      "default": "wolontariat@festiwalnowamuzyka.pl"
+    },
+    {
+      "type": "header",
+      "content": "Kolory"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Tło",
+      "default": "#0a0a0a"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Tekst",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent (CTA, badge)",
+      "default": "#ff3c78"
+    },
+    {
+      "type": "color",
+      "id": "accent_color_2",
+      "label": "Accent 2",
+      "default": "#7b2fff"
+    },
+    {
+      "type": "color",
+      "id": "card_bg",
+      "label": "Tło kart",
+      "default": "#141414"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Wolontariat"
+    }
+  ]
+}
+{% endschema %}

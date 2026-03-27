@@ -1,0 +1,583 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "artists_grid_GJzzGn": {
+      "type": "artists-grid",
+      "blocks": {
+        "artist_jaPzte": {
+          "type": "artist",
+          "settings": {
+            "name": "Apparat",
+            "image": "shopify://shop_images/apparat-tauron-nowa-muzyka-katowice-2026.png",
+            "bio": "Sascha Ring to mistrz elegancji, który zaczynał od mocnego techno, by z czasem objąć paletę gatunków od popu po IDM.\n\nJako członek Moderat i artysta solo autor siedmiu albumów zawsze dąży do przekroczenia granic między parkietem a salą koncertową. W jego muzyce piosenka zderza się z głębokimi warstwami i bogactwem detali. Ostatnio Apparat zdobywa uznanie za produkcje filmowe, teatralne i telewizyjne - ścieżka dźwiękowa do Capri - Revolution otrzymała nagrodę na Festiwalu Filmowym w Wenecji. Właśnie po 6 latach powrócił z solowym albumem \"A Hum Of Maybe\".",
+            "day": "",
+            "stage": "",
+            "genre_techno": false,
+            "genre_house": false,
+            "genre_electro": false,
+            "genre_ambient": true,
+            "genre_experimental": true,
+            "genre_jazz": false,
+            "genre_postrock": true,
+            "genre_alternative": false,
+            "genre_hiphop": false,
+            "genre_classical": false,
+            "genre_industrial": false,
+            "spotify_url": "https://open.spotify.com/artist/40Ojab0UtVQFjA76qXr8Ot"
+          }
+        },
+        "artist_bLwn01": {
+          "type": "artist",
+          "settings": {
+            "name": "Blawan",
+            "image": "shopify://shop_images/blawan.jpg",
+            "bio": "Wychodząc ze sceny post-dubstepowej, osiągnął sukces dzięki wydawnictwom w Hessle Audio i R&S - mroczna wersja I Wanna Be Down Brandy pt. Getting Me Down stała się wielkim hitem klubowym. Hit Why They Hide Their Bodies Under My Garage (2012) uczynił go liderem odrodzenia industrialnego techno. W 2015 powrócił z własną wytwórnią Ternesc, przerzucając się na modularny syntezator, co wprowadziło nową dynamikę do jego brzmienia. Jesienią 2025 opublikował długo oczekiwany SickElixir - najbardziej osobiste dzieło, stworzone w Berlinie, Leeds, Paryżu i Lizbonie. Łącząc żałobę, traumę rodzinną i sejsmiczne zmiany w życiu, album zanurza słuchaczy w chaotyczny, lecz skrupulatny świat dźwięków, który odzwierciedla przeszłość i prezentuje śmiałą wizję przyszłości.",
+            "day": "",
+            "stage": "",
+            "genre_techno": true,
+            "genre_house": false,
+            "genre_electro": false,
+            "genre_ambient": false,
+            "genre_experimental": false,
+            "genre_jazz": false,
+            "genre_postrock": false,
+            "genre_alternative": false,
+            "genre_hiphop": false,
+            "genre_classical": false,
+            "genre_industrial": true,
+            "spotify_url": "https://open.spotify.com/artist/64kN9EkSTHYhda2FupL0KI"
+          }
+        },
+        "artist_bkk002": {
+          "type": "artist",
+          "settings": {
+            "name": "BOKKA",
+            "image": "shopify://shop_images/548614695_18532007044003488_795987115596468273_n.jpg",
+            "bio": "Jedna z najbardziej enigmatycznych formacji na polskiej scenie alternatywnej – twarze ukryte za maskami, muzyka mówiąca sama za siebie.\n\nPojawili się znikąd w 2013 roku z singlem \"Town Of Strangers\", przyciągając uwagę filmowym brzmieniem i całkowitą anonimowością. Debiutancki album zebrał pochlebne recenzje, również od Pitchforka. Występowali na The Great Escape, Reeperbahn, Colours of Ostrava i Eurosonic, zdobywając nominacje za teledyski na Camerimage, SXSW i Berlin Music Video Awards. Piąty album \"White Room\" (2025) inspirowany estetyką korporacyjną i przestrzeniami liminalnymi ukazuje zespół w najbardziej introspekcyjnej i filmowej odsłonie – emocjonalny, odważny język dźwięku łączący nostalgiczne melodie z futurystyczną produkcją. Na TNMK dotrą tuż po europejskiej trasie, w której supportują Archive.",
+            "day": "",
+            "stage": "",
+            "genre_techno": false,
+            "genre_house": false,
+            "genre_electro": false,
+            "genre_ambient": false,
+            "genre_experimental": false,
+            "genre_jazz": false,
+            "genre_postrock": false,
+            "genre_alternative": true,
+            "genre_hiphop": false,
+            "genre_classical": false,
+            "genre_industrial": false,
+            "spotify_url": "https://open.spotify.com/artist/6R2e6FSXY9vhgOulV08FO3"
+          }
+        },
+        "artist_bsyp03": {
+          "type": "artist",
+          "settings": {
+            "name": "Busy P",
+            "image": "shopify://shop_images/KEVIN-MILLET-8025_HD_RETOUCHE.webp",
+            "bio": "Jeśli znasz Justice, SebastiAn, Uffie czy Breakbot, znasz dzieło Pedro Wintera. W rodzinnym Paryżu Busy P jest symbolem muzycznego undergroundu.\n\nByły skateboardzista i fan hard rocka przypadkiem zakochał się w techno i house pod koniec lat 80. Karierę didżejską rozpoczął w 1995 roku, a rok później jego zaraźliwa energia sprawiła, że został menedżerem Daft Punk. W 2003 wyszedł z cienia i założył wpływową Ed Banger Records - wytwórnię, dzięki której świat usłyszał o Justice, SebastiAn i innych ikonach French Touch. Busy P był jednym z pierwszych, którzy dostrzegli potencjał internetu w branży muzycznej. Po zakończeniu pracy dla Daft Punk został menedżerem Justice. ŚW 2016 otrzymał Order Sztuki i Literatury za znaczące dokonania dla dziedzictwa kulturalnego Francji. Ostatnio grał szeroko komentowany back-to-back z Thomasem Bangalterem, Fred Again... i Erol Alkanem.",
+            "day": "",
+            "stage": "",
+            "genre_techno": false,
+            "genre_house": true,
+            "genre_electro": true,
+            "genre_ambient": false,
+            "genre_experimental": false,
+            "genre_jazz": false,
+            "genre_postrock": false,
+            "genre_alternative": false,
+            "genre_hiphop": false,
+            "genre_classical": false,
+            "genre_industrial": false,
+            "spotify_url": "https://open.spotify.com/artist/3coXUO5EiwR37nzX4xWjIV"
+          }
+        },
+        "artist_dvcl04": {
+          "type": "artist",
+          "settings": {
+            "name": "Dave Clarke",
+            "image": "shopify://shop_images/Zrzut_ekranu_2025-11-27_o_01.36.54.png",
+            "bio": "Baron Techno. Dave Clarke od ponad trzech dekad utrzymuje się na szczycie światowego techno dzięki świetnemu instynktowi i niezłomnej wytrwałości.\n\nUrodzony w Brighton, ukształtowany przez wczesną elektronikę i muzykę klubową lat 80., tworzy własną muzykę od 1990 roku. Kultowy album Archive One (1995) zapoczątkował serię wydawnictw pełnych nieustępliwego techno i futurystycznego electro - mrocznych i zabawnych zarazem, ale zawsze spójnych i dojmujących. Po Devils Advocate (2004) i kompilacji remiksów Charcoal Eyes (2016) powrócił z albumem The Desecration of Desire (2017) z udziałem Louisahhh. Mieszkając w Amsterdamie, gdzie od 18 lat prowadzi własną imprezę podczas Amsterdam Dance Event, Clarke pielęgnuje niezwykłe relacje z najbardziej pożądanymi parkietami świata - od Fabric i Tresoru po Glastonbury i I Love Techno. To ponadczasowy filar techno, nieustannie podziwiany przez nowe pokolenia. Reprezentuje underground, którego zasad nie da się kupić ani sprzedać.",
+            "day": "",
+            "stage": "",
+            "genre_techno": true,
+            "genre_house": false,
+            "genre_electro": true,
+            "genre_ambient": false,
+            "genre_experimental": false,
+            "genre_jazz": false,
+            "genre_postrock": false,
+            "genre_alternative": false,
+            "genre_hiphop": false,
+            "genre_classical": false,
+            "genre_industrial": false,
+            "spotify_url": "https://open.spotify.com/artist/6Fr9aJBxyMOkTFF0b9JZrQ"
+          }
+        },
+        "artist_efde05": {
+          "type": "artist",
+          "settings": {
+            "name": "Efdemin",
+            "image": "shopify://shop_images/efdemin.jpg",
+            "bio": "Rezydent Berghain\nPhillip Sollmann urodził się w 1974 roku w Kassel. Już jako dziecko uwielbiał uderzać we wszystko, co napotkał na swojej drodze, aby sprawdzić, jak zabrzmi.\n\nTen duch odkrywania nowych dźwięków towarzyszy mu przez całą karierę. Oprócz bycia rezydentem berlińskiego Panorama Bar oraz występowania na całym świecie, wydał wiele autorskich produkcji i bogatą listę remiksów dla Pantha Du Prince, Depeche Mode, Sascha Funke, Tigi, DJ Koze i Mobyego. Efdemin słynie z głębokiego, psychodelicznego i osobistego podejścia do muzyki house i techno. Wydał wiele singli i EP-ek w różnych wytwórniach, w tym trzy albumy w DIAL i czwarty LP New Atlantis dla Ostgut Ton w 2019 roku. Jego najnowsze wydawnictwo to album Poly z jesieni 2025.",
+            "day": "",
+            "stage": "",
+            "genre_techno": true,
+            "genre_house": false,
+            "genre_electro": false,
+            "genre_ambient": false,
+            "genre_experimental": false,
+            "genre_jazz": false,
+            "genre_postrock": false,
+            "genre_alternative": false,
+            "genre_hiphop": false,
+            "genre_classical": false,
+            "genre_industrial": false,
+            "spotify_url": "https://open.spotify.com/artist/6hjRjVNLWTCPYci9nxhI1G"
+          }
+        },
+        "artist_ealk06": {
+          "type": "artist",
+          "settings": {
+            "name": "Erol Alkan",
+            "image": "shopify://shop_images/erolalkan.webp",
+            "bio": "3 dekady: rave, house i punkowa energia!\nJego bogata historia brzmi jak mitologia: nieśmiały syn imigrantów pierwszego pokolenia wymknął się ze swojego pokoju, by grać indie przed bezlitosną londyńską publicznością.\n\nZa konsoletą stanął na początku lat 90., ale przełomem było założenie legendarnego klubu TRASH w 1997 roku, gdzie pełnił funkcję promotora i rezydenta DJ-a do zamknięcia u szczycie potęgi w 2007. Alkan na dobre odmienił londyńską scenę klubową, łącząc różne gatunki dzięki eksperymentom i swobodzie. Regularnie grywa w klubach na całym świecie i na najważniejszych festiwalach, często w formule back-to-back - ostatnio wielkim echem odbił się wspólny set z Fred Again, Thomasem Bangalterem z Daft Punk oraz Busy P.  Jako producent pracował z Late of The Pier, The Killers i Duran Duran, a jako remikser tworzył dla The Chemical Brothers, Hot Chip, Tame Impala i Justice. Prowadzi wytwórnię Phantasy Sound i jest rezydentem radia NTS.",
+            "day": "",
+            "stage": "",
+            "genre_techno": false,
+            "genre_house": true,
+            "genre_electro": true,
+            "genre_ambient": false,
+            "genre_experimental": false,
+            "genre_jazz": false,
+            "genre_postrock": false,
+            "genre_alternative": true,
+            "genre_hiphop": false,
+            "genre_classical": false,
+            "genre_industrial": false,
+            "spotify_url": "https://open.spotify.com/artist/3jQ8hpdQo3TCEnb5gmOtH5"
+          }
+        },
+        "artist_guib07": {
+          "type": "artist",
+          "settings": {
+            "name": "Gui Boratto",
+            "image": "shopify://shop_images/gui_boratto.jpg",
+            "bio": "Urodzony w São Paulo producent, inżynier dźwięku i multiinstrumentalista rozpoczął karierę na początku lat 90., udzielając się na niezliczonych wydawnictwach dla dużych i niezależnych wytwórni.\n\nPomimo udanej kariery za kulisami, twórczy popęd okazał się zbyt silny - Boratto zaczął poświęcać się autorskiej muzyce. Po serii wydawnictw dla Plastic City, Audiomatique i Circle, przełomem stała się wysoko oceniona Chromophobia (2007) nakładem kolońskiej Kompakt. Z pięcioma albumami na koncie, licznymi remiksami i produkcjami dla Massive Attack, Bomb The Bass, Pet Shop Boys, Goldfrapp, Mobyego i Paula Simona, Boratto ugruntował swoją pozycję najważniejszego produktu eksportowego Brazylii w dziedzinie muzyki elektronicznej. Artysta łączy energetyczny tech house z pełnymi emocji melodiami i przestrzenną głębią, słynąc z innowacyjnych występów na żywo w kultowych miejscach na całym świecie.",
+            "day": "",
+            "stage": "",
+            "genre_techno": true,
+            "genre_house": true,
+            "genre_electro": false,
+            "genre_ambient": false,
+            "genre_experimental": false,
+            "genre_jazz": false,
+            "genre_postrock": false,
+            "genre_alternative": false,
+            "genre_hiphop": false,
+            "genre_classical": false,
+            "genre_industrial": false,
+            "spotify_url": "https://open.spotify.com/artist/27LGatz1m8aJ7ZaVVWEphc"
+          }
+        },
+        "artist_guyj08": {
+          "type": "artist",
+          "settings": {
+            "name": "Guy J",
+            "image": "shopify://shop_images/guy-j-tauron-nowa-muzyka-katowice-2026.png",
+            "bio": "Guy J – Tel-awiwski artysta, którego sety to hipnotyczne podróże poprzez spektrum house'u, trance'u i techno. Twórca kultowej wytwórni Lost & Found – miejsca, gdzie dobra muzyka elektroniczna istnieje w swojej najczystszej formie. Jeden z najważniejszych artystów swojego pokolenia, który otwierał eventy dla Johna Digweeda, grał back-to-back z Hernanem Cattaneo i podbił Argentynę – kraj, gdzie progressive house jest jak religia. Jego produkcje rodzą się w studiu zwanym „The Cave” i trafiają prosto w serce parkietu – bo jak sam mówi: „Potrzebuję, żeby każdy utwór był prawdziwy i szczery wobec moich uczuć.” Obok Nicka Warrena i Guya Mantzura dopełnia dream line-up miłośników progressive house'u.",
+            "day": "",
+            "stage": "",
+            "genre_techno": false,
+            "genre_house": true,
+            "genre_electro": false,
+            "genre_ambient": true,
+            "genre_experimental": false,
+            "genre_jazz": false,
+            "genre_postrock": false,
+            "genre_alternative": false,
+            "genre_hiphop": false,
+            "genre_classical": false,
+            "genre_industrial": false,
+            "spotify_url": "https://open.spotify.com/artist/7Em4kWZ5atMYknHwSkp3gD"
+          }
+        },
+        "artist_guym09": {
+          "type": "artist",
+          "settings": {
+            "name": "Guy Mantzur",
+            "image": "shopify://shop_images/8afb31d2-2c4e-4380-ae02-c4d62245b46a.jpg",
+            "bio": "30 lat w trasie, jeden cel!\nOd ponad trzech dekad Guy Mantzur kształtuje globalną scenę muzyki elektronicznej charakterystycznym brzmieniem łączącym Tech House, Techno i Progressive House.\n\nJego muzyka ukazywała się w Ultra, Lost & Found, Bedrock, Diynamic, All Day I Dream i Kompakt. Prowadzi monachijską wytwórnię Plattenbank Records (od 2007) i globalny brand Moments (od 2019). Zdobywca XL Award dla najlepszego Underground DJ (2013) i Walla/Smirnoff Nightlife Award (2018). W 2024 roku Buenos Aires uhonorowało go jako Gościa Honorowego, uznając wpływ jako artysty i ambasadora kulturalnego. Znany z konsekwencji, kreatywności i integralności – jego kariera to nieustanna podróż, która łączy muzykę z emocjami.",
+            "day": "",
+            "stage": "",
+            "genre_techno": true,
+            "genre_house": true,
+            "genre_electro": false,
+            "genre_ambient": false,
+            "genre_experimental": false,
+            "genre_jazz": false,
+            "genre_postrock": false,
+            "genre_alternative": false,
+            "genre_hiphop": false,
+            "genre_classical": false,
+            "genre_industrial": false,
+            "spotify_url": "https://open.spotify.com/artist/2DUa456repGwOOrcDKzcRP"
+          }
+        },
+        "artist_hani10": {
+          "type": "artist",
+          "settings": {
+            "name": "Hania Rani: Chilling Bambino",
+            "image": "shopify://shop_images/Zrzut_ekranu_2026-01-26_o_13.19.58.png",
+            "bio": "Hania Rani, świeżo po zdobyciu prestiżowej Europejskiej Nagrody Filmowej, wystąpi na TNMK w dwóch zupełnie różnych odsłonach, pokazując cały przekrój swojej artystycznej wrażliwości. Po wcześniej ogłoszonym i błyskawicznie wyprzedanym koncercie otwarcia z orkiestrą NOSPR, ogłaszamy drugi projekt na scenie głównej MCK: Hania Rani: Chilling Bambino.\n\nMuzyka Hani Rani wciąga jak grawitacja – jej hipnotyczna moc porusza słuchacza niezależnie od woli. Pianistka, kompozytorka i wokalistka wyłoniła się jako nonkonformistka łącząca klasykę, jazz i elektronikę. Chilling Bambino to jej alter ego, nieustannie ewoluujący projekt, który wydobywa miłość do syntezatora Prophet i zabiera słuchacza w dźwiękową podróż przez mroczną elektronikę i hipnotyczne rytmy, gdy Rani puszcza wodze fantazji.",
+            "day": "",
+            "stage": "",
+            "genre_techno": false,
+            "genre_house": false,
+            "genre_electro": false,
+            "genre_ambient": true,
+            "genre_experimental": true,
+            "genre_jazz": false,
+            "genre_postrock": false,
+            "genre_alternative": false,
+            "genre_hiphop": false,
+            "genre_classical": true,
+            "genre_industrial": false,
+            "spotify_url": "https://open.spotify.com/artist/14YzutUdMwS9yTnI0IFBaD"
+          }
+        },
+        "artist_W3gfwt": {
+          "type": "artist",
+          "settings": {
+            "name": "Hania Rani: „Non Fiction: Piano Concerto in Four Movements” z Narodową Orkiestrą Symfoniczną Polskiego Radia",
+            "image": "shopify://shop_images/hania-rani-non-fiction-nospr-tauron-nowa-muzyka-katowice.png",
+            "bio": "Pobierz\nHania Rani - TNMK 2026Pobierz\nHania Rani wykona swój pierwszy koncert fortepianowy w towarzystwie Narodowej Orkiestry Symfoniczną Polskiego Radia. Monumentalna sala koncertowa NOSPR stanie się sceną inauguracji festiwalu, który od dwóch dekad eksploruje to, co w muzyce nieuchwytne i zachwycające.\n\n„Non Fiction: Piano Concerto in Four Movements” to utwór symfoniczny inspirowany twórczością Josimy Feldszuh – młodej kompozytorki z getta warszawskiego. Hania Rani przeplata tę historię z obrazami współczesnych konfliktów w Ukrainie i Strefie Gazy, badając współistnienie harmonii i chaosu. Tworzy dźwiękową metaforę przetrwania ludzkiego ducha w obliczu przemocy. iła muzyki Hania Rani tkwi w połączeniu intymnej wrażliwości z odważnymi pomysłami – i to właśnie ta kombinacja fascynuje publiczność na całym świecie. Klasycznie wykształcona pianistka, wokalistka i kompozytorka ma na koncie kilkanaście albumów solowych i kolaboracyjnych, muzykę filmową, teatralną oraz do instalacji artystycznych. . To właśnie w tak wyjątkowy sposób – muzyką, która łączy intymność fortepianu z rozmachem orkiestry symfonicznej – otworzymy 21. edycję festiwalu. To dopiero początek ogłoszeń – już niedługo ujawnimy kolejne niespodzianki TNMK 2026.",
+            "day": "",
+            "stage": "",
+            "genre_techno": false,
+            "genre_house": false,
+            "genre_electro": false,
+            "genre_ambient": false,
+            "genre_experimental": false,
+            "genre_jazz": false,
+            "genre_postrock": false,
+            "genre_alternative": false,
+            "genre_hiphop": false,
+            "genre_classical": false,
+            "genre_industrial": false,
+            "spotify_url": "https://open.spotify.com/artist/14YzutUdMwS9yTnI0IFBaD"
+          }
+        },
+        "artist_herb11": {
+          "type": "artist",
+          "settings": {
+            "name": "Herbert & Momoko",
+            "image": "shopify://shop_images/87f6bf1c-fb8f-4b90-bffb-79f7cc4effc8_2500x3748_c3918160-ad34-444f-97f5-3c3426b5b3cb.webp",
+            "bio": "Matthew Herbert i perkusistka-wokalistka Momoko Gill łączą siły w pełnej duszy współpracy poruszającej się między parkietem a introspektywnymi nastrojami.\n\nMatthew Herbert i perkusistka-wokalistka Momoko Gill ogłosili wydanie nowego albumu \"Clay\" w czerwcu 2025. To pełna duszy współpraca, która zręcznie porusza się między parkietem a introspektywnymi nastrojami wczesnych godzin. Zwinna i szczera, \"Clay\" czerpie z różnorodnych znalezionych źródeł – od japońskich koto po piłki do koszykówki – aby nadać brzmieniu organiczny charakter. Dla Herberta oznacza to traktowanie świata jako instrumentu: bomby eksplodujące w Libii, szkielety koni, 20 000 psów, 245 sklepów. Jego album \"ONE PIG\" – śledząc cykl życia świni od narodzin po talerz – pozostaje jednym z najbardziej prowokacyjnych dzieł muzyki elektronicznej tego stulecia.",
+            "day": "",
+            "stage": "",
+            "genre_techno": false,
+            "genre_house": true,
+            "genre_electro": false,
+            "genre_ambient": false,
+            "genre_experimental": true,
+            "genre_jazz": false,
+            "genre_postrock": false,
+            "genre_alternative": false,
+            "genre_hiphop": false,
+            "genre_classical": false,
+            "genre_industrial": false,
+            "spotify_url": "https://open.spotify.com/artist/6wXFUcaG7779tb1Ok72GBn"
+          }
+        },
+        "artist_hino12": {
+          "type": "artist",
+          "settings": {
+            "name": "Hinode Tapes & Hiroki Chiba",
+            "image": "shopify://shop_images/491438545_18495665611013117_1155169783990746122_n.jpg",
+            "bio": "Gdańskie trio Hinode Tapes wystąpi w NOSPR w wyjątkowej kooperacji z tokijskim kontrabasistą i kompozytorem Hirokim Chibą, który przyjeżdża specjalnie na ten koncert z Japonii.\n\nEksperymentalna fuzja ambientu, free jazzu i post-rocka z fascynacją japońską poezją. Debiutancki album (2022) trafił na 5. miejsce w plebiscycie Gazety Wyborczej, drugi \"Kiki Mori\" (Instant Classic, 2024) to ekstremalny minimalizm – ledwo słyszalna perkusja, odgłosy tarcia dłoni, bzyczenie echa taśmowego. Wspólna płyta nagrana w Gdańsku i Tokio z Hirokim Chibą – basistą współpracującym z Belle and Sebastian, Jimem O'Rourke i Tomaszem Dąbrowskim to pierwsza taka europejsko-azjatycka kooperacja w karierach obu zespołów, ze specjalnie stworzonymi wizualizacjami. Organiczny materiał, w którym jasność walczy z mrokiem, zen z niepokojem. Skład: Piotr Chęcki – saksofon, elektronika; Piotr Kaliński – gitara, elektronika; Jacek Prościński – perkusja, elektronika; Hiroki Chiba – kontrabas, elektronika (Tokio).",
+            "day": "",
+            "stage": "",
+            "genre_techno": false,
+            "genre_house": false,
+            "genre_electro": false,
+            "genre_ambient": true,
+            "genre_experimental": true,
+            "genre_jazz": false,
+            "genre_postrock": false,
+            "genre_alternative": false,
+            "genre_hiphop": false,
+            "genre_classical": false,
+            "genre_industrial": false,
+            "spotify_url": "https://open.spotify.com/artist/0QPwgwCyIO8jdAijhPIRFn"
+          }
+        },
+        "artist_jmsn13": {
+          "type": "artist",
+          "settings": {
+            "name": "JMSN",
+            "image": "shopify://shop_images/Zrzut_ekranu_2026-01-26_o_17.20.26.png",
+            "bio": "Jeden z najbardziej poszukiwanych wykonawców i producentów na międzynarodowej scenie. Prawdziwy lider ruchu DIY.\n\nPochodzący z Detroit JMSN (wymawiany 'Jameson') to jeden z najbardziej poszukiwanych wykonawców i producentów na międzynarodowej scenie. Prawdziwy lider ruchu DIY z ponad 10-letnią karierą, 8 albumami studyjnymi i niezapomnianymi występami na żywo. Jego talenty wykorzystali Kendrick Lamar, Mac Miller, J. Cole, Kaytranada i Freddie Gibbs. Po światowej trasie obejmującej 100 koncertów z albumu \"Soft Spot\", wraca z najnowszym wydawnictwem \"it's only about u if you think it is…\"",
+            "day": "",
+            "stage": "",
+            "genre_techno": false,
+            "genre_house": false,
+            "genre_electro": false,
+            "genre_ambient": false,
+            "genre_experimental": false,
+            "genre_jazz": false,
+            "genre_postrock": false,
+            "genre_alternative": true,
+            "genre_hiphop": true,
+            "genre_classical": false,
+            "genre_industrial": false,
+            "spotify_url": "https://open.spotify.com/artist/6HCkJzbswOIc7Qc5TJ1n5l"
+          }
+        },
+        "artist_jdig14": {
+          "type": "artist",
+          "settings": {
+            "name": "John Digweed",
+            "image": "shopify://shop_images/a5401a63afb5ae4e9a12f25dc9486ef30ba3b7e7.png",
+            "bio": "Legenda światowych parkietów.\nDJ dla DJ-ów. Autor pierwszego właściwego DJ mix compilation, pierwszy brytyjski DJ z rezydencją w nowojorskim Twilo.\n\nJohn Digweed to DJ dla DJ-ów. Autor pierwszego właściwego DJ mix compilation (\"The Mix Collection\" z Sashą), pierwszy brytyjski DJ z rezydencją w nowojorskim Twilo, twórca remiksów dla Underworld, Quincy'ego Jonesa i New Order. Jego wytwórnia Bedrock to globalny stempel jakości dla undergroundowych producentów. Program radiowy \"Transitions\" nadawany w 60 krajach dla 14 milionów słuchaczy tygodniowo to numer jeden na Mixcloud. Nazwa John Digweed jest synonimem integralności, pomysłowości i jakości w świecie muzyki tanecznej.",
+            "day": "",
+            "stage": "",
+            "genre_techno": true,
+            "genre_house": true,
+            "genre_electro": false,
+            "genre_ambient": false,
+            "genre_experimental": false,
+            "genre_jazz": false,
+            "genre_postrock": false,
+            "genre_alternative": false,
+            "genre_hiphop": false,
+            "genre_classical": false,
+            "genre_industrial": false,
+            "spotify_url": "https://open.spotify.com/artist/3xnDktxhudJR2Wv3HZDQ9W"
+          }
+        },
+        "artist_kray15": {
+          "type": "artist",
+          "settings": {
+            "name": "Kangding Ray",
+            "image": "shopify://shop_images/kangding-ray-tauron-nowa-muzyka-katowice-2026.png",
+            "bio": "Autor ścieżki dźwiękowej do Sirat. Matematyczne rytmy spotykają klubową energię.\n\nUrodzony we Francji David Letellier od lat mieszka i tworzy w Berlinie jako specjalista od eksperymentalnej elektroniki o klubowym charakterze. Jego muzyka jest pełna melodycznych mikrostruktur, plątaniny atonalnych dźwięków i matematycznych rytmów. Niewielu muzykom udaje się zgłębiać zbieżność techno i muzyki eksperymentalnej tak skutecznie, jak Letellierowi. Od debiutanckiego albumu w niemieckiej raster-noton (2006) stale rozwija podejście do projektowania dźwięku i koncepcyjną głębię swoich wydawnictw. Złożona estetyka dźwiękowa Kangding Raya przekracza granice, nieustannie ewoluując w eksploracji faktury, rytmu i designu dźwięku. Remiksował Martina Gorea, Bena Frosta i Battles, a jego ścieżka dźwiękowa do Sirat pokazuje pełnię jego talentu. Witalność i niepowtarzalność jego muzyki zdobyły mu fanów na całym świecie - od wymagających słuchaczy muzyki awangardowej po oddanych bywalców klubów.",
+            "day": "",
+            "stage": "",
+            "genre_techno": true,
+            "genre_house": false,
+            "genre_electro": false,
+            "genre_ambient": true,
+            "genre_experimental": true,
+            "genre_jazz": false,
+            "genre_postrock": false,
+            "genre_alternative": false,
+            "genre_hiphop": false,
+            "genre_classical": false,
+            "genre_industrial": false,
+            "spotify_url": "https://open.spotify.com/artist/20UWNE4rEU7YMO0GHq4F26"
+          }
+        },
+        "artist_k7FPFP": {
+          "type": "artist",
+          "settings": {
+            "name": "Modeselektor",
+            "image": "shopify://shop_images/Zrzut_ekranu_2026-03-14_o_11.20.00.png",
+            "bio": "Berlińska definicja flamboyance. Gernot Bronsert i Sebastian Szary kształtują scenę elektroniczną od wczesnych lat 2000. Od rave'ów na obrzeżach Berlina po legendarną wytwórnię Monkeytown Records. Genre-melding productions, które rozbiły wszystkie schematy. Kultowe Labstyle parties, ikoniczne małpie logo i DJ sety, które wywracają parkiet do góry nogami. Właśnie wydali „Modeselektor Classics Vol. 1” – nie remiksy, nie polerowanie. Rekonstrukcja. Klasyki przebudowane od zera, przeszłość i przyszłość w tym samym pokoju. Still moving. Na Tauron Nowa Muzyka zagra również Apparat – kto wie, czy gwiazdy nie ułożą się tej nocy dla nas w niezapomnianej koniunkcji.",
+            "day": "",
+            "stage": "",
+            "genre_techno": true,
+            "genre_house": false,
+            "genre_electro": false,
+            "genre_ambient": false,
+            "genre_experimental": true,
+            "genre_jazz": false,
+            "genre_postrock": false,
+            "genre_alternative": false,
+            "genre_hiphop": false,
+            "genre_classical": false,
+            "genre_industrial": false,
+            "spotify_url": "https://open.spotify.com/artist/2jYMYP2SVifgmzNRQJx3SJ"
+          }
+        },
+        "artist_mono16": {
+          "type": "artist",
+          "settings": {
+            "name": "Monolink",
+            "image": "shopify://shop_images/monolink-tauron-nowa-muzyka-katowice.png",
+            "bio": "Ponad ćwierć miliarda streamów. Burning Man, Tomorrowland, Montreux Jazz Festival. Trzeci album \"The Beauty Of It All\" ukazał się we wrześniu 2025.\n\nMonolink to singer-songwriter, producent i multiinstrumentalista, który łączy muzykę gitarową z awangardową kompozycją elektroniczną – tworząc rozpoznawalne brzmienie między emocjonalną głębią a rytmiczną ekspresją. Jego muzyka urzeka bogatą paletą tonów: od bluesa i folku, przez ambient electronica i house, po melodic techno. Po sukcesie albumów \"Amniotic\" (2018) i \"Under Darkening Skies\" (2021), najnowszy \"The Beauty Of It All\" eksploruje tematy piękna, przemijania i ludzkiej więzi, pokazując połączenie organicznej instrumentacji i elektronicznej innowacji w zupełnie nowym świetle. Jego występy na żywo to transformacyjne doświadczenia łączące instrumenty, soulowy wokal i hipnotyzujące wizualizacje – immersyjne soundscapes, które rezonują głęboko z publicznością zarówno emocjonalnie, jak i fizycznie. Lata pasji i nieskazanej integralności uczyniły z niego cenionego artystę w świecie muzyki elektronicznej.",
+            "day": "",
+            "stage": "",
+            "genre_techno": false,
+            "genre_house": true,
+            "genre_electro": false,
+            "genre_ambient": true,
+            "genre_experimental": false,
+            "genre_jazz": false,
+            "genre_postrock": false,
+            "genre_alternative": true,
+            "genre_hiphop": false,
+            "genre_classical": false,
+            "genre_industrial": false,
+            "spotify_url": "https://open.spotify.com/artist/2I4hRNCYkPKJQlkoEZKjYx"
+          }
+        },
+        "artist_nwar17": {
+          "type": "artist",
+          "settings": {
+            "name": "Nick Warren",
+            "image": "shopify://shop_images/DSC3787.jpg",
+            "bio": "Ten dźwięk poznasz wszędzie...\nMożna poznać, kiedy Nick Warren stoi za konsoletą – idealna klubowa mieszanka napędzającej perkusji i szybującej melodyjności, która zalewa parkiet dźwiękiem.\n\nJeden z pierwszych \"superstar DJs\" lat 90., rezydent legendarnego Cream, twórca kultowej serii Global Underground i remiksów dla Lany Del Rey, Underworld i Quincy'ego Jonesa. Zaproszony przez Massive Attack jako oficjalny DJ na ich amerykańską trasę, Warren od dekad hipnotyzuje kluby i areny od Londynu po Buenos Aires swoim charakterystycznym progressive sound. Jako A&R bristolskiej Hope Recordings i właściciel globalnej marki The Soundgarden, ugruntował swoją reputację jako gigant muzyki elektronicznej.",
+            "day": "",
+            "stage": "",
+            "genre_techno": false,
+            "genre_house": true,
+            "genre_electro": false,
+            "genre_ambient": true,
+            "genre_experimental": false,
+            "genre_jazz": false,
+            "genre_postrock": false,
+            "genre_alternative": false,
+            "genre_hiphop": false,
+            "genre_classical": false,
+            "genre_industrial": false,
+            "spotify_url": "https://open.spotify.com/artist/7aY9PtsNws5AdwbdktfbaN"
+          }
+        },
+        "artist_omst18": {
+          "type": "artist",
+          "settings": {
+            "name": "Omasta",
+            "image": "shopify://shop_images/omasta-tauron-nowa-muzyka-katowice.png",
+            "bio": "Zakorzenieni w jazzie, głęboko zanurzeni w hip-hopie i kulturze ulicznej – Omasta tworzy śmiałą fuzję tradycji i innowacji.\n\nNazwa pochodzi z krakowskiej gwary i oznacza \"tłuszcz dodawany dla smaku\" – ich muzyka jest gęsta, nasycona ciężkimi bębnami, głębokim basem i melodyjnymi partiami fortepianu, trąbki, saksofonu i fletu. Od oficjalnego startu w lutym 2024 (hołd dla J Dilli w Paul's Boutique) występują na London Jazz Festival, OFF Festival, Gent Jazz Festival, w The Jazz Cafe i Ronnie Scott's. Współpracują z Madlibem, Aquilesem Navarro, Tenderlonious'em i legendą polskiego free jazzu Leszkiem Żądło. Debiutancki album (Astigmatic Records, 2025) znalazł się w zestawieniach roku m.in. Somewhere Soul i Tina Edwards.",
+            "day": "",
+            "stage": "",
+            "genre_techno": false,
+            "genre_house": false,
+            "genre_electro": false,
+            "genre_ambient": false,
+            "genre_experimental": false,
+            "genre_jazz": true,
+            "genre_postrock": false,
+            "genre_alternative": false,
+            "genre_hiphop": false,
+            "genre_classical": false,
+            "genre_industrial": false,
+            "spotify_url": "https://open.spotify.com/artist/1pKSKHYzswJjPo6qLjx1qO"
+          }
+        },
+        "artist_pnok19": {
+          "type": "artist",
+          "settings": {
+            "name": "Princess Nokia",
+            "image": "shopify://shop_images/776x776bb.jpg",
+            "bio": "Hip-hop, punk, soul i emo w jednym. Świeży album Girls celebruje kobiecość i autentyczność.\n\nPoza muzyką Princess Nokia jest aktywną orędowniczką feminizmu i praw LGBTQ+. Jest współzałożicielką Smart Girl Club - kolektywu wspierającego kobiety poprzez dyskusje na temat feminizmu i zdrowego stylu życia. Jej aktywizm i kunszt artystyczny uczyniły z niej silny głos marginalizowanych społeczności. Nadal wykorzystuje swoją pozycję, aby kwestionować normy społeczne i inspirować do samoekspresji. W październiku 2025 ukazał się jej najnowszy album Girls, celebrujący kobiecość i autentyczność.",
+            "day": "",
+            "stage": "",
+            "genre_techno": false,
+            "genre_house": false,
+            "genre_electro": false,
+            "genre_ambient": false,
+            "genre_experimental": false,
+            "genre_jazz": false,
+            "genre_postrock": false,
+            "genre_alternative": true,
+            "genre_hiphop": true,
+            "genre_classical": false,
+            "genre_industrial": false,
+            "spotify_url": "https://open.spotify.com/artist/6lay1nwbE6hTx1jivysUAL"
+          }
+        },
+        "artist_FNqMyd": {
+          "type": "artist",
+          "settings": {
+            "name": "SBTRKT",
+            "image": "shopify://shop_images/Zrzut_ekranu_2026-03-14_o_11.40.20.png",
+            "bio": "Sonic shapeshifter, który od dekady nagina zasady muzyki elektronicznej. UK bass, soul i eksperymentalne tekstury w brzmieniu całkowicie własnym. Futurystyczne beaty, emocjonalna głębia i współprace z wybitnymi wokalistami. W 2026 wraca z najbardziej ambitnym rozdziałem: nowy album nurza się w elektronicznych korzeniach – synth-heavy, rytmicznie skomplikowany, immersyjny.",
+            "day": "",
+            "stage": "",
+            "genre_techno": false,
+            "genre_house": false,
+            "genre_electro": true,
+            "genre_ambient": false,
+            "genre_experimental": true,
+            "genre_jazz": false,
+            "genre_postrock": false,
+            "genre_alternative": false,
+            "genre_hiphop": false,
+            "genre_classical": false,
+            "genre_industrial": false,
+            "spotify_url": "https://open.spotify.com/artist/1O10apSOoAPjOu6UhUNmeI"
+          }
+        }
+      },
+      "block_order": [
+        "artist_jaPzte",
+        "artist_bLwn01",
+        "artist_bkk002",
+        "artist_bsyp03",
+        "artist_dvcl04",
+        "artist_efde05",
+        "artist_ealk06",
+        "artist_guib07",
+        "artist_guyj08",
+        "artist_guym09",
+        "artist_hani10",
+        "artist_W3gfwt",
+        "artist_herb11",
+        "artist_hino12",
+        "artist_jmsn13",
+        "artist_jdig14",
+        "artist_kray15",
+        "artist_k7FPFP",
+        "artist_mono16",
+        "artist_nwar17",
+        "artist_omst18",
+        "artist_pnok19",
+        "artist_FNqMyd"
+      ],
+      "name": "Artists Grid",
+      "settings": {
+        "section_title": "Artyści",
+        "section_title_size": 40,
+        "columns_desktop": 3,
+        "columns_tablet": 2,
+        "grid_gap": 32,
+        "card_radius": 12,
+        "photo_ratio": "100",
+        "name_size": 24,
+        "bio_size": 15,
+        "spotify_player_style": "compact",
+        "spotify_theme": "0",
+        "bg_color": "#0a0a0a",
+        "card_bg": "#1a1a1a",
+        "name_color": "#ffffff",
+        "text_color": "#bbbbbb",
+        "accent_color": "#1db954",
+        "filter_bg": "#0a0a0a",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    }
+  },
+  "order": [
+    "main",
+    "artists_grid_GJzzGn"
+  ]
+}

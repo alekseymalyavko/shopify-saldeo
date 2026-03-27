@@ -1,0 +1,44 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "volunteer_main": {
+      "type": "volunteer",
+      "settings": {
+        "badge_text": "Nabór otwarty",
+        "hero_title_1": "Współtwórz festiwal",
+        "hero_title_2": "od środka",
+        "hero_subtitle": "Tauron Nowa Muzyka Katowice 2026 szuka wolontariuszy. 4 dni festiwalu, backstage, muzyka i ludzie — wejdź do ekipy.",
+        "cta_text": "Zgłoś się →",
+        "deadline": "10 maja 2026",
+        "form_url": "https://docs.google.com/forms/d/19w6z3L_ECJX3fSHfGa1xojZWdUGhFe6Lpp1zavG20Cg/viewform?embedded=true",
+        "form_height": 1400,
+        "email": "wolontariat@festiwalnowamuzyka.pl",
+        "bg_color": "#0a0a0a",
+        "text_color": "#ffffff",
+        "accent_color": "#ff3c78",
+        "accent_color_2": "#7b2fff",
+        "card_bg": "#141414"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "volunteer_main"
+  ]
+}

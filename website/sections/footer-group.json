@@ -1,0 +1,71 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "name": "t:sections.footer.name",
+  "type": "footer",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "brand_information_KmJU99": {
+          "type": "brand_information",
+          "settings": {
+            "show_social": false
+          }
+        }
+      },
+      "block_order": [
+        "brand_information_KmJU99"
+      ],
+      "custom_css": [],
+      "settings": {
+        "color_scheme": "scheme-4",
+        "newsletter_enable": true,
+        "newsletter_heading": "Dołącz do newslettera TNMK",
+        "enable_follow_on_shop": false,
+        "show_social": true,
+        "enable_country_selector": false,
+        "enable_language_selector": false,
+        "payment_enable": true,
+        "show_policy": false,
+        "margin_top": 0,
+        "padding_top": 48,
+        "padding_bottom": 12
+      }
+    },
+    "custom_liquid_kTDxMy": {
+      "type": "custom-liquid",
+      "disabled": true,
+      "name": "t:sections.custom-liquid.presets.name",
+      "settings": {
+        "custom_liquid": "<elevenlabs-convai agent-id=\"agent_1501k8zhjjnger59mcx610r91d93\"></elevenlabs-convai><script src=\"https://unpkg.com/@elevenlabs/convai-widget-embed\" async type=\"text/javascript\"></script>",
+        "color_scheme": "",
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
+    "custom_liquid_QWhbMd": {
+      "type": "custom-liquid",
+      "custom_css": [],
+      "name": "t:sections.custom-liquid.presets.name",
+      "settings": {
+        "custom_liquid": "<div class=\"custom-footer-note\">\n  <p>realizacja: <a href=\"https://tuszewicki.ai\" target=\"_blank\">tuszewicki.ai</a></p>\n</div>\n\n<style>\n.custom-footer-note {\n  text-align: center;\n  padding: 5px 0;\n}\n\n.custom-footer-note p {\n  font-size: 13px;\n  color: rgba(255, 255, 255, 0.5);\n  margin: 0;\n  letter-spacing: 0.3px;\n}\n\n.custom-footer-note a {\n  color: rgba(255, 255, 255, 0.5);\n  text-decoration: none;\n}\n\n.custom-footer-note a:hover {\n  color: rgba(255, 255, 255, 0.8);\n}\n</style>",
+        "color_scheme": "scheme-77224cdd-4fcb-4edf-b057-5a20fd1270f4",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    }
+  },
+  "order": [
+    "footer",
+    "custom_liquid_kTDxMy",
+    "custom_liquid_QWhbMd"
+  ]
+}
