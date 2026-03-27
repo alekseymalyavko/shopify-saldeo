@@ -263,7 +263,6 @@ function buildInvoiceXML(order, contractorId, isCompany = false) {
       const net = Number.parseFloat(item.price) / (1 + vatRate / 100);
       const safeTitle = escapeXml(item.title || "Item");
 
-
       return `
         <INVOICE_ITEM>
           <NAME>${safeTitle}</NAME>

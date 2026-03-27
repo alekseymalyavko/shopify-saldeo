@@ -33,14 +33,14 @@ if (!VERCEL_URL) {
 
 const WEBHOOK_ENDPOINT = `${VERCEL_URL.replace(/\/$/, "")}/api/shopify-webhook`;
 
-// Read the secret from .env.example (fill it in there if not already)
-const envFile = readFileSync(".env.example", "utf8");
+// Read the secret from .env.local
+const envFile = readFileSync(".env.local", "utf8");
 const secretMatch = envFile.match(/SHOPIFY_WEBHOOK_SECRET=(.+)/);
 if (!secretMatch) {
-  console.error("SHOPIFY_WEBHOOK_SECRET not found in .env.example");
+  console.error("SHOPIFY_WEBHOOK_SECRET not found in .env.local");
   process.exit(1);
 }
-const SHOPIFY_WEBHOOK_SECRET = secretMatch[1].trim();
+const SHOPIFY_WEBHOOK_SECRET = secretMatch[1].trim().replace(/^"|"$/g, "");
 
 // ---------------------------------------------------------------------------
 // Fake order payload (mirrors what Shopify sends for a paid order)
