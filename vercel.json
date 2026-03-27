@@ -1,5 +1,7 @@
 {
   "version": 2,
+  "buildCommand": "",
+  "outputDirectory": "",
   "functions": {
     "api/shopify-webhook.js": {
       "memory": 256,
