@@ -219,7 +219,7 @@ async function createInvoiceWithRetry(invoiceXml, retries = 3, delayMs = 1500) {
 // =======================
 // Contractor merge XML builder
 // =======================
-function buildContractorMergeXML(order) {
+function buildContractorMergeXML(order, nip = null) {
   const addr = order.billing_address || {};
   const name = addr.name || order.email;
   const email = (order.email || "").trim().toLowerCase();
@@ -237,11 +237,10 @@ function buildContractorMergeXML(order) {
       <FULL_NAME>${escapeXml(fullName)}</FULL_NAME>
       <NAME>${escapeXml(name || fullName)}</NAME>
       ${email ? `<EMAIL>${escapeXml(email)}</EMAIL>` : ""}
+      ${nip ? `<VAT_NUMBER>${escapeXml(nip)}</VAT_NUMBER>` : ''}
       <STREET>${escapeXml(addr.address1 || "-")}</STREET>
       <CITY>${escapeXml(addr.city || "-")}</CITY>
       <POSTCODE>${escapeXml(addr.zip || "00-000")}</POSTCODE>
-      ${addr.company ? `<COMPANY_NAME>${escapeXml(addr.company)}</COMPANY_NAME>` : ""}
-      ${addr.vat_number ? `<NIP>${escapeXml(addr.vat_number)}</NIP>` : ""}
     </CONTRACTOR>
   </CONTRACTORS>
 </ROOT>`;
@@ -250,7 +249,7 @@ function buildContractorMergeXML(order) {
 // =======================
 // Invoice XML builder
 // =======================
-function buildInvoiceXML(order, contractorId) {
+function buildInvoiceXML(order, contractorId, isCompany = false) {
   const issueDate = new Date(order.created_at).toISOString().slice(0, 10);
   const invoiceNumber = buildInvoiceNumber(order);
   const totalGross = parseFloat(order.total_price).toFixed(2);
@@ -285,6 +284,9 @@ function buildInvoiceXML(order, contractorId) {
     <SALE_DATE>${escapeXml(issueDate)}</SALE_DATE>
     <DUE_DATE>${escapeXml(issueDate)}</DUE_DATE>
     <PURCHASER_CONTRACTOR_ID>${escapeXml(contractorId)}</PURCHASER_CONTRACTOR_ID>
+    ${isCompany
+      ? `<RECIPIENT_CONTRACTOR_ID>${escapeXml(contractorId)}</RECIPIENT_CONTRACTOR_ID>`
+    : ''}
     <CURRENCY_ISO4217>${escapeXml(order.currency || "PLN")}</CURRENCY_ISO4217>
     ${cleanEnv(process.env.SALDEO_CARD_PAYMENT_METHOD_ID)
       ? `<PAYMENT_METHOD_ID>${escapeXml(cleanEnv(process.env.SALDEO_CARD_PAYMENT_METHOD_ID))}</PAYMENT_METHOD_ID>`
@@ -523,8 +525,12 @@ export default async function handler(req, res) {
       company_program_id: cleanEnv(process.env.SALDEO_COMPANY_PROGRAM_ID),
     });
 
+    const attributes = order.note_attributes || [];
+    const nip = attributes.find(a => a.name === 'NIP')?.value?.trim() || null;
+    const isCompany = !!nip;
+
     // 1️⃣ contractor/merge (idempotent by design — safe to retry)
-    const contractorXml = buildContractorMergeXML(order);
+    const contractorXml = buildContractorMergeXML(order, nip);
     const contractorRes = await saldeoRequest(
       `/api/xml/1.0/contractor/merge?company_program_id=${cleanEnv(process.env.SALDEO_COMPANY_PROGRAM_ID)}`,
       contractorXml,
@@ -551,7 +557,7 @@ export default async function handler(req, res) {
     });
 
     // 2️⃣ invoice/add
-    const invoiceXml = buildInvoiceXML(order, contractorId);
+    const invoiceXml = buildInvoiceXML(order, contractorId, isCompany);
     logEvent("info", context, "invoice.add.start", {
       invoiceNumber: buildInvoiceNumber(order),
     });

@@ -65,6 +65,10 @@ const order = {
     zip: "00-001",
     vat_number: "321",
   },
+  note_attributes: [
+    { name: "NIP", value: "5213992583" },
+    // { name: "company_name", value: "Jan Kowalski Test Company" },
+  ],
   line_items: [
     {
       id: 122,
