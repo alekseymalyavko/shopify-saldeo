@@ -69,7 +69,7 @@ const order = {
     {
       id: 122,
       title: "Event Ticket - Test Concert",
-      quantity: 5,
+      quantity: 1,
       price: "123.00",
       tax_lines: [{ rate: 0.08, price: "8.00" }],
     },

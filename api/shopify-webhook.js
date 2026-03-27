@@ -253,6 +253,7 @@ function buildContractorMergeXML(order) {
 function buildInvoiceXML(order, contractorId) {
   const issueDate = new Date(order.created_at).toISOString().slice(0, 10);
   const invoiceNumber = buildInvoiceNumber(order);
+  const totalGross = parseFloat(order.total_price).toFixed(2);
 
   const itemsXml = order.line_items
     .map((item) => {
@@ -262,6 +263,7 @@ function buildInvoiceXML(order, contractorId) {
 
       const net = Number.parseFloat(item.price) / (1 + vatRate / 100);
       const safeTitle = escapeXml(item.title || "Item");
+
 
       return `
         <INVOICE_ITEM>
@@ -290,6 +292,10 @@ function buildInvoiceXML(order, contractorId) {
     <INVOICE_ITEMS>
       ${itemsXml}
     </INVOICE_ITEMS>
+    <INVOICE_PAYMENTS>
+      <PAYMENT_AMOUNT>${totalGross}</PAYMENT_AMOUNT>
+      <PAYMENT_DATE>${escapeXml(issueDate)}</PAYMENT_DATE>
+    </INVOICE_PAYMENTS>
   </INVOICE>
 </ROOT>`;
 }
